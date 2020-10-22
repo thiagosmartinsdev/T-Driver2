@@ -1,0 +1,22 @@
+// {
+//     "version": "2.0.0",
+//     "tasks": [
+//       {
+//         "label": "Flutter-Launch-All",
+//         "dependsOn": [
+//           "Flutter-Launch-Android",
+//           "Flutter-Launch-Device"
+//         ]
+//       },
+//       {
+//         "label": "Flutter-Launch-Android",
+//         "type": "shell",
+//         "command": "flutter run -d 'emulator-5554' "
+//       },
+//       {
+//         "label": "Flutter-Launch-Device",
+//         "type": "shell",
+//         "command": "flutter run -d '192.168.100.4:5555' "
+//       }
+//     ]
+//   }

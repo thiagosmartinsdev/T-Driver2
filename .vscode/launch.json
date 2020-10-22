@@ -1,0 +1,25 @@
+{
+    // Use o IntelliSense para saber mais sobre os atributos possíveis.
+    // Focalizar para exibir as descrições dos atributos existentes.
+    // Para obter mais informações, acesse: https://go.microsoft.com/fwlink/?linkid=830387
+    // "version": "0.2.0",
+    // "configurations": [
+    //     {
+    //         "name": "tdriver2",
+    //         "request": "launch",
+    //         "type": "dart"
+    //     },
+    //     {
+    //         "name": "LG G7",
+    //         "request": "launch",
+    //         "type": "dart",
+    //         "deviceId": "192.162.100.5:5555"
+    //     },
+    //     {
+    //         "name": "Emulador",
+    //         "request": "launch",
+    //         "type": "dart",
+    //         "deviceId": "emulator-5554"
+    //     }
+    // ]
+}
