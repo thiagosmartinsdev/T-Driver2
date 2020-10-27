@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:tdriver2/app/modules/home/home_controller.dart';
 import 'package:tdriver2/app/modules/home/widgets/cardHome.dart';
 import 'package:tdriver2/app/modules/home/widgets/lista_ultimos_lancamentos.dart';
+import 'package:tdriver2/app/routes/app_pages.dart';
 
 class HomePage extends GetView<HomeController> {
   @override
@@ -139,7 +140,7 @@ class HomePage extends GetView<HomeController> {
                 color: Colors.white,
                 size: 40,
               ),
-              onPressed: () {}),
+              onPressed: () => Get.toNamed("/cadastro")),
         ),
       ),
     );

@@ -19,7 +19,7 @@ Future<void> main() async {
     initialRoute: Routes.INITIAL,
     initialBinding: HomeBinding(),
     theme: appThemeData,
-    defaultTransition: Transition.fade,
+    defaultTransition: Transition.cupertino,
     getPages: AppPages.pages,
     home: HomePage(),
   ));

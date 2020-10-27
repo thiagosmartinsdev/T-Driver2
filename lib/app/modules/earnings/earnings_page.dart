@@ -14,14 +14,10 @@ class EarningsPage extends GetView<EarningsController> {
     return Scaffold(
       appBar: AppBar(title: Text('EarningsPage')),
       body: Container(
-        child: GetX<EarningsController>(
-            init: EarningsController(
-                repository:
-                    EarningsRepository(apiClient: MyApiClient(db: BD()))),
-            builder: (_) {
-              return Container();
-            }),
-      ),
+          child: Center(
+              child: Container(
+        child: Text("TESTE"),
+      ))),
     );
   }
 }
