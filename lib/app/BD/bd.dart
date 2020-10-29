@@ -209,6 +209,7 @@ class BD {
 
   List _buildWeeklyList(List li) {
     List<Map> makedList = new List();
+    int id;
     DateTime initialDate;
     DateTime lastDate;
     double ganhos = 0;
@@ -245,9 +246,10 @@ class BD {
       }
 
       Map<String, Object> mapa = new Map();
+      mapa['id'] = id;
       mapa['dataInicial'] = initialDate;
       mapa['dataFinal'] = lastDate;
-      mapa['ano'] = initialDate.year;
+      mapa['ano'] = initialDate.year.toString();
       mapa['periodo'] =
           new DateFormat("dd/MM/yyyy").format(initialDate).toString() +
               " a " +
@@ -282,7 +284,7 @@ class BD {
         " when '10' then 'Outubro' "
         " when '11' then 'Novembro' "
         " when '12' then 'Dezembro' "
-        " end as mes, "
+        " end as name, "
         " strftime('%m', data) as numMes, "
         " strftime('%Y', data) as ano, "
         " printf('%.2f', sum( "

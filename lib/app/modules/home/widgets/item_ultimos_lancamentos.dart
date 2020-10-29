@@ -12,6 +12,7 @@ class ItemUltimosLancamentos extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      
       decoration: BoxDecoration(
           color: Color(0XFFF2F5F9),
           borderRadius: BorderRadius.circular(10),

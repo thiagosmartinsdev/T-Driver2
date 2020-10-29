@@ -11,8 +11,6 @@ import 'package:tdriver2/app/modules/home/widgets/item_ultimos_lancamentos.dart'
 class ListaUltimosLancamentos extends StatelessWidget {
   ListaUltimosLancamentos({Key key}) : super(key: key);
 
-  final controller = Get.find<HomeController>();
-
   @override
   Widget build(BuildContext context) {
     return GetX<HomeController>(

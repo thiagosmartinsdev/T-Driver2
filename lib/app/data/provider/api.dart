@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:tdriver2/app/BD/bd.dart';
+import 'package:tdriver2/app/data/model/card_model.dart';
 
 import 'package:tdriver2/app/data/model/movimentacao.dart';
 
@@ -11,18 +12,41 @@ class MyApiClient {
 
   getAll() async {
     try {
-      var response = await db.getUltimosLancamentos();
+      var releases = await db.getUltimosLancamentos();
+      var monthly = await db.getGanhosMes(2020);
+      var weekly = await db.getGanhosSemana(2020);
+      List<MovimentacaoModel> listReleases;
+      List<CardModel> listMonthly;
+      List<CardModel> listWeekly;
 
-      if (response.length != 0) {
-        List<MovimentacaoModel> listModel = response.map<MovimentacaoModel>((map) {
+      if (releases.length != 0) {
+        listReleases =
+            releases.map<MovimentacaoModel>((map) {
           return MovimentacaoModel.sqlFromMap(map);
         }).toList();
-
-        return listModel;
-
       }
+
+      if (monthly.length != 0) {
+        listMonthly = monthly.map<CardModel>((map) {
+          return CardModel.sqlFromMap(map);
+        }).toList();
+      }
+
+      if (weekly.length != 0) {
+        listWeekly = weekly.map<CardModel>((map) {
+          return CardModel.sqlFromMap(map);
+        }).toList();
+      }
+
+      Map<String, List> mapa = Map();
+      mapa['releases'] = listReleases;
+      mapa['monthly'] = listMonthly;
+      mapa['weekly'] = listWeekly;
+
+      return mapa;
+
     } on Error catch (e) {
-      print(e);
+      print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>> ERRO API" + e.toString());
     }
     // try {
     //   var response = await httpClient.get(baseUrl);
