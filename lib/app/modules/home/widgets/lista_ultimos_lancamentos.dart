@@ -14,8 +14,6 @@ class ListaUltimosLancamentos extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetX<HomeController>(
-      init: HomeController(
-          repository: HomeRepository(apiClient: MyApiClient(db: BD()))),
       builder: (_) {
         return ListView.separated(
           padding: EdgeInsets.zero,

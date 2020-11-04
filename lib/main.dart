@@ -1,7 +1,12 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
+import 'package:tdriver2/app/BD/bd.dart';
+import 'package:tdriver2/app/data/home_service.dart';
+import 'package:tdriver2/app/data/provider/api.dart';
+import 'package:tdriver2/app/data/repository/home_repository.dart';
 import 'package:tdriver2/app/modules/home/home_binding.dart';
+import 'package:tdriver2/app/modules/home/home_controller.dart';
 import 'app/modules/home/home_page.dart';
 import 'app/routes/app_pages.dart';
 import 'app/theme/theme.dart';
@@ -13,6 +18,9 @@ Future<void> main() async {
       statusBarIconBrightness: Brightness.dark,
       systemNavigationBarColor: Colors.black45,
       systemNavigationBarIconBrightness: Brightness.light));
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await initServices();
 
   runApp(GetMaterialApp(
     debugShowCheckedModeBanner: false,
@@ -23,4 +31,8 @@ Future<void> main() async {
     getPages: AppPages.pages,
     home: HomePage(),
   ));
+}
+
+initServices() async {
+  await Get.putAsync(() => HomeService().init());
 }

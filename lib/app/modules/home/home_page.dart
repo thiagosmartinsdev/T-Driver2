@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// import 'package:http/http.dart' as http;
 import 'package:tdriver2/app/modules/home/home_controller.dart';
 import 'package:tdriver2/app/modules/home/widgets/cardHome.dart';
 import 'package:tdriver2/app/modules/home/widgets/lista_ultimos_lancamentos.dart';
-import 'package:tdriver2/app/routes/app_pages.dart';
 
 class HomePage extends GetView<HomeController> {
   @override
@@ -55,7 +53,7 @@ class HomePage extends GetView<HomeController> {
                     child: Stack(
                       children: [
                         _listaUltimosLancamentos(),
-                         _botaoAdd(),
+                        _botaoAdd(),
                       ],
                     ),
                   ),
@@ -82,17 +80,6 @@ class HomePage extends GetView<HomeController> {
       width: Get.width,
       height: Get.height * 0.067,
       alignment: Alignment.center,
-      decoration: BoxDecoration(
-          color: Colors.red,
-          gradient: LinearGradient(
-              colors: [
-                Color(0xFFB2EBF2),
-                Colors.blueGrey[100]
-              ], //           Color(0XFFF2F5F9)],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter),
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10), topRight: Radius.circular(10))),
       child: Text("Últimos lançamentos",
           style: TextStyle(
               color: Color(0xFF636363),
@@ -102,21 +89,18 @@ class HomePage extends GetView<HomeController> {
   }
 
   _listaUltimosLancamentos() {
-    return Container(
-      width: Get.width,
-      decoration: BoxDecoration(
-        color: Colors.blueGrey[100],
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+    return Center(
+      child: Container(
+        width: Get.width * 0.95,
+        child: ListaUltimosLancamentos(),
       ),
-      child: ListaUltimosLancamentos(),
     );
   }
 
   _botaoAdd() {
     return Align(
       alignment: Alignment.bottomCenter,
-          child: Card(
+      child: Card(
         elevation: 10,
         child: Container(
           alignment: Alignment.center,

@@ -10,7 +10,8 @@ class MyApiClient {
   final db = BD();
   MyApiClient({@required db});
 
-  getAll() async {
+  Future getAll() async {
+    print("GET ALL from API <<<<<<<<<<<<<<<<<<<<<<<<<<");
     try {
       var releases = await db.getUltimosLancamentos();
       var monthly = await db.getGanhosMes(2020);
@@ -42,6 +43,8 @@ class MyApiClient {
       mapa['releases'] = listReleases;
       mapa['monthly'] = listMonthly;
       mapa['weekly'] = listWeekly;
+
+      print(">>>>>>>>>>>>>>>>>>>>>>>END GET ALL from API <<<<<<<<<<<<<<<<<<<<<<<<<<");
 
       return mapa;
 

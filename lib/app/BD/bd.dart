@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:tdriver2/app/data/model/movimentacao.dart';
 import 'package:path_provider/path_provider.dart';
@@ -6,7 +7,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:date_utils/date_utils.dart';
 
-class BD {
+class BD extends GetxService {
   // criaremos uma variável static, pois nunca irá mudar
   static final BD _instance = new BD.internal();
 
@@ -42,21 +43,28 @@ class BD {
       return _db;
     }
     // chamamos agora o initBd que irá iniciar o nosso banco de dados
-    _db = await initBd();
+    initBd();
     return _db;
   }
 
   // iniciando nosso banco de dados em async pois ele é uma transição
-  initBd() async {
+  Future<Database> initBd() async {
     // Directory faz parte do plugin dart:io e o getApplicationDocumentsDirectory() faz parte do path_provider
     // aqui nós estamos acessando o diretório nativo do android
+
+    print(">>>>>>>>>>>>> INIT DB CALLED<<<<<<<<<<<<<");
     Directory documentoDiretorio = await getApplicationDocumentsDirectory();
 
     // o join() junta duas coisas, no caso iremos juntar o diretorio juntamente com o nosso banco de dados
     String caminho = join(documentoDiretorio.path, "bd_principal.db");
 
     // após ter acesso ao local do nosso BD, iremos abri-lo
-    var nossoBD = await openDatabase(caminho, version: 1, onCreate: _onCreate);
+    Database nossoBD =
+        await openDatabase(caminho, version: 1, onCreate: _onCreate);
+
+    print(">>>>>>>>>>>>> CLOSE DB CALLED<<<<<<<<<<<<<");
+
+    _db = nossoBD;
 
     return nossoBD;
   }

@@ -8,7 +8,10 @@ import 'package:tdriver2/app/modules/home/home_controller.dart';
 class HomeBinding implements Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<HomeController>(() => HomeController(
-        repository: HomeRepository(apiClient: MyApiClient(db: BD()))));
+    print("INIT BINDING HOME CONTROLLER");
+    Get.lazyPut<HomeController>(() {
+      return HomeController(
+          repository: HomeRepository(apiClient: MyApiClient(db: BD())));
+    });
   }
 }

@@ -1,9 +1,7 @@
-import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 import 'package:tdriver2/app/data/model/card_model.dart';
 import 'package:tdriver2/app/data/model/movimentacao.dart';
-import 'package:tdriver2/app/data/provider/api.dart';
 import 'package:tdriver2/app/data/repository/home_repository.dart';
 
 class HomeController extends GetxController {
@@ -15,27 +13,23 @@ class HomeController extends GetxController {
   var releasesWeekly = List<CardModel>().obs;
 
   @override
-  onInit() async {
-    Map<String, List> response = await repository.getAll();
+  Future<void> onInit() async {
+    print(">>>>>>>>>>>>>>>>>>>ON INIT<<<<<<<<<<<<<");
+    await repository.getAll().then((response) {
+      response['releases'].forEach((element) {
+        lastReleases.add(element);
+      });
 
-    try {
+      response['monthly'].forEach((element) {
+        releasesMontlhy.add(element);
+      });
 
-    response['releases'].forEach((element) {
-      lastReleases.add(element);
+      response['weekly'].forEach((element) {
+        releasesWeekly.add(element);
+      });
     });
 
-    response['monthly'].forEach((element) {
-      releasesMontlhy.add(element);
-    });
-
-    response['weekly'].forEach((element) {
-      releasesWeekly.add(element);
-    });
-    
-    } on Exception catch(e) {
-      print (">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>ERRO" + e.toString());
-    }
-
+    super.onInit();
   }
 
   final _obj = ''.obs;

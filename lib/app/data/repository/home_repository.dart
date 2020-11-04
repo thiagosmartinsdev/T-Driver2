@@ -7,7 +7,7 @@ final MyApiClient apiClient;
 
 HomeRepository({@required this.apiClient}) : assert(apiClient != null);
 
-getAll(){
+getAll() {
   return apiClient.getAll();
 }
 // getId(id){
