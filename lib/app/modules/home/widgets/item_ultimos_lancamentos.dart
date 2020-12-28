@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:tdriver2/app/data/model/movimentacao.dart';
 
 class ItemUltimosLancamentos extends StatelessWidget {
-  final Map model;
+  final MovimentacaoModel model;
   final bool green;
   const ItemUltimosLancamentos({Key key, this.model, this.green})
       : super(key: key);
@@ -12,7 +12,6 @@ class ItemUltimosLancamentos extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      
       decoration: BoxDecoration(
           color: Color(0XFFF2F5F9),
           borderRadius: BorderRadius.circular(10),
@@ -31,7 +30,7 @@ class ItemUltimosLancamentos extends StatelessWidget {
             padding: EdgeInsets.zero,
             width: Get.width * 0.05,
             // height: Get.height * 0.08,
-            color: model['idTipoMovimentacao'] == 1
+            color: model.idTipoMovimentacao == 1
                 ? Colors.green[400]
                 : Colors.red[400],
           ),
@@ -43,11 +42,11 @@ class ItemUltimosLancamentos extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  model['motivo'],
+                  model.motivo,
                   style: TextStyle(fontSize: 20, color: Colors.grey[700]),
                 ),
                 Text(
-                  model['data'],
+                  model.data.toString(),
                   style: TextStyle(fontSize: 15, color: Colors.grey[700]),
                 ),
               ],
@@ -60,7 +59,7 @@ class ItemUltimosLancamentos extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "R\u0024 " + model['valor'],
+                  "R\u0024 " + model.valor.toStringAsFixed(2),
                   style: TextStyle(fontSize: 20, color: Colors.grey[700]),
                 ),
               ],

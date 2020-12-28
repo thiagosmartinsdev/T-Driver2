@@ -127,22 +127,28 @@ class BD extends GetxService {
   Future<List<Map<String, dynamic>>> getUltimosLancamentos() async {
     var dbGanho = await db;
 
-    var res = await dbGanho.rawQuery(""
-        "select "
-        "mm.id_movimentacao, "
-        " case "
-        "when mm.id_empresa not null then e.descricao "
-        "when mm.id_tipo_gasto not null then tp.descricao "
-        "end as motivo, "
-        "mm.id_tipo_movimentacao as tipoMov, "
-        "printf('%.2f', mm.valor) as valor, "
-        "strftime('%d/%m/', mm.data) || substr(strftime('%Y', mm.data),3, 2) as data "
-        "from $tabelaMovimentacao mm "
-        "left join $tabelaEmpresa e on mm.id_empresa = e.id_empresa "
-        "left join $tabelaTipoGasto tp on mm.id_tipo_gasto = tp.id_tipo_gasto "
-        "order by mm.id_movimentacao desc ");
+    try {
+      var res = await dbGanho.rawQuery(""
+          "select "
+          "   mm.id_movimentacao, "
+          " case "
+          "   when mm.id_empresa not null then e.descricao "
+          "   when mm.id_tipo_gasto not null then tp.descricao "
+          " end as motivo, "
+          "mm.id_tipo_movimentacao as tipoMov, "
+          "mm.valor, "
+          "mm.data "
+          "from $tabelaMovimentacao mm "
+          "left join $tabelaEmpresa e on mm.id_empresa = e.id_empresa "
+          "left join $tabelaTipoGasto tp on mm.id_tipo_gasto = tp.id_tipo_gasto "
+          "order by mm.id_movimentacao desc  ");
 
-    return res;
+      return res.toList();
+    } on DatabaseException catch (e) {
+      print("Erro: '$e'");
+    }
+
+    return List();
   }
 
   Future<List> getResumoMensalSemanal(int ano,
@@ -151,14 +157,14 @@ class BD extends GetxService {
     try {
       var res = await dbGanho.rawQuery(""
               "select "
-              "mm.id_movimentacao as id, "
-              " case "
-              "when mm.id_empresa not null then e.descricao "
-              "when mm.id_tipo_gasto not null then tp.descricao "
-              "end as motivo, "
-              "mm.id_tipo_movimentacao as tipoMov, "
-              "printf('%.2f', mm.valor) as valor, "
-              "strftime('%d/%m/%Y' ,mm.data) as data "
+              "   mm.id_movimentacao as id, "
+              "   case "
+              "     when mm.id_empresa not null then e.descricao "
+              "     when mm.id_tipo_gasto not null then tp.descricao "
+              "     end as motivo, "
+              "   mm.id_tipo_movimentacao as tipoMov, "
+              "   mm.valor, "
+              "   strftime('%d/%m/%Y' ,mm.data) as data "
               "from $tabelaMovimentacao mm "
               "left join $tabelaEmpresa e on mm.id_empresa = e.id_empresa "
               "left join $tabelaTipoGasto tp on mm.id_tipo_gasto = tp.id_tipo_gasto " +
@@ -176,9 +182,12 @@ class BD extends GetxService {
 
   Future<int> apagarRegistro(int idRegistro) async {
     var banco = await db;
-
-    return await banco.delete(tabelaMovimentacao,
-        where: "id_movimentacao = ?", whereArgs: [idRegistro]);
+    try {
+      return await banco.delete(tabelaMovimentacao,
+          where: "id_movimentacao = ?", whereArgs: [idRegistro]);
+    } on DatabaseException catch (e) {
+      print(e);
+    }
   }
 
   //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> GANHOS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -227,51 +236,52 @@ class BD extends GetxService {
     int y = 0;
 
     for (x; x < li.length; x++) {
-      var lista = li[x];
-      initialDate = Utils.firstDayOfWeek(DateTime.parse(lista['data']));
-      lastDate = Utils.lastDayOfWeek(DateTime.parse(lista['data']));
+      if (x != 39) {
+        var lista = li[x];
+        initialDate = Utils.firstDayOfWeek(DateTime.parse(lista['data']));
+        lastDate = Utils.lastDayOfWeek(DateTime.parse(lista['data']));
 
-      for (y; y < li.length; y++) {
-        var lista = li[y];
-        if ((DateTime.parse(lista['data']).compareTo(initialDate) == 0 ||
-                DateTime.parse(lista['data']).isAfter(initialDate)) &&
-            (DateTime.parse(lista['data']).compareTo(lastDate) == 0 ||
-                DateTime.parse(lista['data']).isBefore(lastDate))) {
-          if (lista['idMovimentacao'] == 1) {
-            ganhos += lista['valor'];
+        for (y; y < li.length; y++) {
+          var lista = li[y];
+          if ((DateTime.parse(lista['data']).compareTo(initialDate) == 0 ||
+                  DateTime.parse(lista['data']).isAfter(initialDate)) &&
+              (DateTime.parse(lista['data']).compareTo(lastDate) == 0 ||
+                  DateTime.parse(lista['data']).isBefore(lastDate))) {
+            if (lista['idMovimentacao'] == 1) {
+              ganhos += lista['valor'];
+            } else {
+              gastos += lista['valor'];
+            }
           } else {
-            gastos += lista['valor'];
+            x = y;
+            x--;
+            break;
           }
-        } else {
-          x = y;
-          x--;
-          break;
         }
+
+        if (y == li.length) {
+          x = y;
+        }
+
+        Map<String, Object> mapa = new Map();
+        mapa['id'] = id;
+        mapa['dataInicial'] = initialDate;
+        mapa['dataFinal'] = lastDate;
+        mapa['ano'] = initialDate.year.toString();
+        mapa['periodo'] =
+            new DateFormat("dd/MM/yyyy").format(initialDate).toString() +
+                " a " +
+                new DateFormat("dd/MM/yyyy")
+                    .format(lastDate.subtract(Duration(days: 1)))
+                    .toString();
+        mapa['ganhos'] = ganhos;
+        mapa['gastos'] = gastos;
+        ganhos = 0;
+        gastos = 0;
+
+        makedList.add(mapa);
       }
-
-      if (y == li.length) {
-        x = y;
-      }
-
-      Map<String, Object> mapa = new Map();
-      mapa['id'] = id;
-      mapa['dataInicial'] = initialDate;
-      mapa['dataFinal'] = lastDate;
-      mapa['ano'] = initialDate.year.toString();
-      mapa['periodo'] =
-          new DateFormat("dd/MM/yyyy").format(initialDate).toString() +
-              " a " +
-              new DateFormat("dd/MM/yyyy")
-                  .format(lastDate.subtract(Duration(days: 1)))
-                  .toString();
-      mapa['ganhos'] = ganhos.toStringAsFixed(2);
-      mapa['gastos'] = gastos.toStringAsFixed(2);
-      ganhos = 0;
-      gastos = 0;
-
-      makedList.add(mapa);
     }
-
     return makedList;
   }
 
@@ -295,16 +305,16 @@ class BD extends GetxService {
         " end as name, "
         " strftime('%m', data) as numMes, "
         " strftime('%Y', data) as ano, "
-        " printf('%.2f', sum( "
+        " sum( "
         "   case when id_tipo_movimentacao = 1 "
         "   then valor "
         "   end "
-        " )) as ganhos, "
-        " printf('%.2f', sum( "
+        " ) as ganhos, "
+        " sum( "
         "   case when id_tipo_movimentacao = 2 "
         "   then valor "
         "   end "
-        " )) as gastos "
+        " ) as gastos "
         "from movimentacao "
         "where strftime('%Y', data) == '$ano' "
         "group by strftime('%m', data) ");
@@ -319,7 +329,7 @@ class BD extends GetxService {
         " case when e.descricao is not null then e.descricao"
         " else tp.descricao"
         " end as empresa,"
-        " printf('%.2f',sum(m.valor)) as valor"
+        " sum(m.valor) as valor"
         " from movimentacao m"
         " left join empresas e on m.id_empresa = e.id_empresa"
         " left join tipo_gasto tp on m.id_tipo_gasto = tp.id_tipo_gasto"
@@ -334,7 +344,7 @@ class BD extends GetxService {
     var banco = await db;
     var total = await banco.rawQuery(""
         " select "
-        " printf('%.2f',sum(m.valor)) as total"
+        " sum(m.valor) as total"
         " from movimentacao m"
         " where"
         " strftime('%m', data) == '08'"
@@ -346,7 +356,7 @@ class BD extends GetxService {
   Future<String> getGastosSemana() async {
     var banco = await db;
     var gasto = await banco.rawQuery(""
-        "SELECT printf('%.2f', SUM(valor)) as valor "
+        "SELECT SUM(valor) as valor "
         "FROM $tabelaMovimentacao "
         "WHERE id_tipo_movimentacao = 2 and "
         "strftime('%W', data) = strftime('%W', 'now' ) ");

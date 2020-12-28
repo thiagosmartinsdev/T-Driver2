@@ -30,6 +30,7 @@ dependencies:
   date_utils: any
   path_provider: any
   sqflite: ^1.1.5
+  brasil_fields: ^0.5.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

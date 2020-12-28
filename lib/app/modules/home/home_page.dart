@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tdriver2/app/BD/bd.dart';
 import 'package:tdriver2/app/modules/home/home_controller.dart';
 import 'package:tdriver2/app/modules/home/widgets/cardHome.dart';
 import 'package:tdriver2/app/modules/home/widgets/lista_ultimos_lancamentos.dart';

@@ -1,17 +1,15 @@
 import 'package:meta/meta.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:tdriver2/app/BD/bd.dart';
 import 'package:tdriver2/app/data/model/card_model.dart';
 
 import 'package:tdriver2/app/data/model/movimentacao.dart';
-
-const baseUrl = 'http://gerador-nomes.herokuapp.com/nomes/10';
 
 class MyApiClient {
   final db = BD();
   MyApiClient({@required db});
 
   Future getAll() async {
-    print("GET ALL from API <<<<<<<<<<<<<<<<<<<<<<<<<<");
     try {
       var releases = await db.getUltimosLancamentos();
       var monthly = await db.getGanhosMes(2020);
@@ -21,8 +19,7 @@ class MyApiClient {
       List<CardModel> listWeekly;
 
       if (releases.length != 0) {
-        listReleases =
-            releases.map<MovimentacaoModel>((map) {
+        listReleases = releases.map<MovimentacaoModel>((map) {
           return MovimentacaoModel.sqlFromMap(map);
         }).toList();
       }
@@ -44,23 +41,19 @@ class MyApiClient {
       mapa['monthly'] = listMonthly;
       mapa['weekly'] = listWeekly;
 
-      print(">>>>>>>>>>>>>>>>>>>>>>>END GET ALL from API <<<<<<<<<<<<<<<<<<<<<<<<<<");
-
       return mapa;
-
     } on Error catch (e) {
-      print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>> ERRO API" + e.toString());
+      print(e.toString());
+      return;
     }
-    // try {
-    //   var response = await httpClient.get(baseUrl);
-    //   if(response.statusCode == 200){
-    //     Map<String, dynamic> jsonResponse = json.decode(response.body);
-    //       List<MyModel> listMyModel = jsonResponse['data'].map<MyModel>((map) {
-    //         return MyModel.fromJson(map);
-    //       }).toList();
-    //     return listMyModel;
-    //   }else print ('erro -get');
-    // } catch(_){ }
+  }
+
+  Future add(obj) async {
+    try {
+      db.inserirListaMovimentacao(obj);
+    } on DatabaseException catch (error) {
+      print(error);
+    }
   }
 
   // getId(id) async {
@@ -68,20 +61,8 @@ class MyApiClient {
   //     var response = await httpClient.get(baseUrl);
   //     if (response.statusCode == 200) {
   //       Map<String, dynamic> jsonResponse = json.decode(response.body);
-  //       // TODO: implement methods!
   //     } else
   //       print('erro -get');
-  //   } catch (_) {}
-  // }
-
-  // add(obj) async {
-  //   try {
-  //     var response = await httpClient.post(baseUrl,
-  //         headers: {'Content-Type': 'application/json'}, body: jsonEncode(obj));
-  //     if (response.statusCode == 200) {
-  //       // TODO: implement methods!
-  //     } else
-  //       print('erro -post');
   //   } catch (_) {}
   // }
 
@@ -90,7 +71,6 @@ class MyApiClient {
   //     var response = await httpClient.put(baseUrl,
   //         headers: {'Content-Type': 'application/json'}, body: jsonEncode(obj));
   //     if (response.statusCode == 200) {
-  //       // TODO: implement methods!
   //     } else
   //       print('erro -post');
   //   } catch (_) {}
@@ -100,7 +80,6 @@ class MyApiClient {
   //   try {
   //     var response = await httpClient.delete(baseUrl);
   //     if (response.statusCode == 200) {
-  //       // TODO: implement methods!
   //     } else
   //       print('erro -post');
   //   } catch (_) {}

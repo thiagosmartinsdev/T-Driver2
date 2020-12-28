@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
-import 'package:tdriver2/app/data/repository/home_repository.dart';
+import 'package:tdriver2/app/data/repository/releases_repository.dart';
 
 class CardController extends GetxController {
-  final HomeRepository repository;
+  final ReleasesRepository repository;
   CardController({@required this.repository}) : assert(repository != null);
 
   final _obj = ''.obs;

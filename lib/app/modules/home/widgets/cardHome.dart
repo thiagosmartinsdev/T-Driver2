@@ -11,7 +11,6 @@ class CardHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> BUILD CARD <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
     return GetX<HomeController>(builder: (c) {
       return Container(
           width: Get.width,
@@ -69,7 +68,8 @@ class CardHome extends StatelessWidget {
                                             color: Colors.white, fontSize: 20)),
                                     Container(
                                       width: Get.width * 0.24,
-                                      child: Text(cards.earnings,
+                                      child: Text(
+                                          cards.earnings.toStringAsFixed(2),
                                           textAlign: TextAlign.end,
                                           style: TextStyle(
                                               color: Colors.white,
@@ -97,7 +97,8 @@ class CardHome extends StatelessWidget {
                                             color: Colors.white, fontSize: 20)),
                                     Container(
                                       width: Get.width * 0.24,
-                                      child: Text(cards.expensive,
+                                      child: Text(
+                                          cards.expensive.toStringAsFixed(2),
                                           textAlign: TextAlign.end,
                                           style: TextStyle(
                                               color: Colors.white,

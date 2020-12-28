@@ -1,11 +1,12 @@
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
+import 'package:tdriver2/app/BD/bd.dart';
 import 'package:tdriver2/app/data/model/card_model.dart';
 import 'package:tdriver2/app/data/model/movimentacao.dart';
-import 'package:tdriver2/app/data/repository/home_repository.dart';
+import 'package:tdriver2/app/data/repository/releases_repository.dart';
 
 class HomeController extends GetxController {
-  final HomeRepository repository;
+  final ReleasesRepository repository;
   HomeController({@required this.repository}) : assert(repository != null);
 
   var lastReleases = List<MovimentacaoModel>().obs;
@@ -14,22 +15,28 @@ class HomeController extends GetxController {
 
   @override
   Future<void> onInit() async {
-    print(">>>>>>>>>>>>>>>>>>>ON INIT<<<<<<<<<<<<<");
     await repository.getAll().then((response) {
-      response['releases'].forEach((element) {
-        lastReleases.add(element);
-      });
+      if (response['releases'] != null) {
+        response['releases'].forEach((element) {
+          lastReleases.add(element);
+        });
 
-      response['monthly'].forEach((element) {
-        releasesMontlhy.add(element);
-      });
+        response['monthly'].forEach((element) {
+          releasesMontlhy.add(element);
+        });
 
-      response['weekly'].forEach((element) {
-        releasesWeekly.add(element);
-      });
+        response['weekly'].forEach((element) {
+          releasesWeekly.add(element);
+        });
+      }
     });
 
     super.onInit();
+  }
+
+  del() {
+    // var db = BD();
+    // db.apagarRegistro(45);
   }
 
   final _obj = ''.obs;

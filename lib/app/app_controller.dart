@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
-import 'data/repository/home_repository.dart';
+import 'data/repository/releases_repository.dart';
 
 class AppController extends GetxController {
-  final HomeRepository repository;
+  final ReleasesRepository repository;
   AppController({@required this.repository}) : assert(repository != null);
 
   final _obj = ''.obs;
