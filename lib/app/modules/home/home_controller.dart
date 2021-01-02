@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
-import 'package:tdriver2/app/BD/bd.dart';
 import 'package:tdriver2/app/data/model/card_model.dart';
 import 'package:tdriver2/app/data/model/movimentacao.dart';
 import 'package:tdriver2/app/data/repository/releases_repository.dart';
@@ -9,12 +8,25 @@ class HomeController extends GetxController {
   final ReleasesRepository repository;
   HomeController({@required this.repository}) : assert(repository != null);
 
-  var lastReleases = List<MovimentacaoModel>().obs;
+  final lastReleases = List<MovimentacaoModel>().obs;
   var releasesMontlhy = List<CardModel>().obs;
   var releasesWeekly = List<CardModel>().obs;
 
   @override
   Future<void> onInit() async {
+    loadReleases();
+    super.onInit();
+  }
+
+  resetHome() {
+    lastReleases.clear();
+    releasesMontlhy.clear();
+    releasesWeekly.clear();
+
+    loadReleases();
+  }
+
+  Future<void> loadReleases() async {
     await repository.getAll().then((response) {
       if (response['releases'] != null) {
         response['releases'].forEach((element) {
@@ -30,8 +42,6 @@ class HomeController extends GetxController {
         });
       }
     });
-
-    super.onInit();
   }
 
   del() {

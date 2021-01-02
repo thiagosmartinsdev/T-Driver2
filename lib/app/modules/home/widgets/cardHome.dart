@@ -32,7 +32,7 @@ class CardHome extends StatelessWidget {
                         : c.releasesWeekly[index];
                     return Card(
                         color:
-                            cardMensal ? Color(0xFFFF7000) : Color(0xFF788993),
+                            cardMensal ? Color(0xFF607D8B) : Color(0xFF90A4AE),
                         child: Container(
                           padding: EdgeInsets.only(top: Get.height * 0.02),
                           child: Column(

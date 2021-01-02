@@ -15,8 +15,6 @@ class CardModel {
     this.id = json['id'];
     this.name = json['name'];
     this.year = json['ano'];
-    // this.earnings = json['ganhos'];
-    // this.expensive = json['gastos'];
     this.earnings = ganhos ??= 0.00;
     this.expensive = gastos ??= 0.00;
     this.period = json['periodo'];

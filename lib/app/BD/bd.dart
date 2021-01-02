@@ -180,7 +180,7 @@ class BD extends GetxService {
     return new List();
   }
 
-  Future<int> apagarRegistro(int idRegistro) async {
+  apagarRegistro(int idRegistro) async {
     var banco = await db;
     try {
       return await banco.delete(tabelaMovimentacao,
@@ -235,12 +235,14 @@ class BD extends GetxService {
     int x = 0;
     int y = 0;
 
+    // ignore: unnecessary_statements
     for (x; x < li.length; x++) {
       if (x != 39) {
         var lista = li[x];
         initialDate = Utils.firstDayOfWeek(DateTime.parse(lista['data']));
         lastDate = Utils.lastDayOfWeek(DateTime.parse(lista['data']));
 
+        // ignore: unnecessary_statements
         for (y; y < li.length; y++) {
           var lista = li[y];
           if ((DateTime.parse(lista['data']).compareTo(initialDate) == 0 ||
@@ -269,9 +271,9 @@ class BD extends GetxService {
         mapa['dataFinal'] = lastDate;
         mapa['ano'] = initialDate.year.toString();
         mapa['periodo'] =
-            new DateFormat("dd/MM/yyyy").format(initialDate).toString() +
+            DateFormat("dd/MM/yyyy").format(initialDate).toString() +
                 " a " +
-                new DateFormat("dd/MM/yyyy")
+                DateFormat("dd/MM/yyyy")
                     .format(lastDate.subtract(Duration(days: 1)))
                     .toString();
         mapa['ganhos'] = ganhos;

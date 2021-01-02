@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:tdriver2/app/data/model/movimentacao.dart';
 
 class ItemUltimosLancamentos extends StatelessWidget {
@@ -13,7 +14,7 @@ class ItemUltimosLancamentos extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: Color(0XFFF2F5F9),
+          color: Color(0xFFECEFF1),
           borderRadius: BorderRadius.circular(10),
           boxShadow: [
             BoxShadow(
@@ -22,7 +23,7 @@ class ItemUltimosLancamentos extends StatelessWidget {
                 offset: Offset(1, 4),
                 color: Colors.black45)
           ]),
-      height: Get.height * 0.08,
+      height: Get.height * 0.07,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -46,7 +47,7 @@ class ItemUltimosLancamentos extends StatelessWidget {
                   style: TextStyle(fontSize: 20, color: Colors.grey[700]),
                 ),
                 Text(
-                  model.data.toString(),
+                  DateFormat("dd/MM/yyyy").format(model.data).toString(),
                   style: TextStyle(fontSize: 15, color: Colors.grey[700]),
                 ),
               ],
