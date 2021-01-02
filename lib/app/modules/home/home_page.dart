@@ -28,7 +28,8 @@ class HomePage extends GetView<HomeController> {
                     child: Row(
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(left: Get.width * 0.06),
+                          padding: EdgeInsets.only(
+                              top: Get.height * 0.01, left: Get.width * 0.06),
                           child: Icon(
                             Icons.menu,
                             size: 30,

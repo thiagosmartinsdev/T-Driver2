@@ -7,6 +7,7 @@ import 'app/modules/home/home_page.dart';
 import 'app/routes/app_pages.dart';
 import 'app/theme/theme.dart';
 import 'package:get/get.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 Future<void> main() async {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -19,12 +20,18 @@ Future<void> main() async {
   await initServices();
 
   runApp(GetMaterialApp(
-    debugShowCheckedModeBanner: false,
     initialRoute: Routes.INITIAL,
     initialBinding: HomeBinding(),
-    theme: appThemeData,
-    defaultTransition: Transition.cupertino,
     getPages: AppPages.pages,
+    defaultTransition: Transition.cupertino,
+    debugShowCheckedModeBanner: false,
+    theme: appThemeData,
+    locale: Locale('pt', 'BR'),
+    localizationsDelegates: [
+      GlobalMaterialLocalizations.delegate,
+      GlobalWidgetsLocalizations.delegate
+    ],
+    supportedLocales: [Locale('pt')],
     home: HomePage(),
   ));
 }

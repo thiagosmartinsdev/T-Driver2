@@ -31,6 +31,27 @@ class ReleasesPage extends GetView<ReleasesController> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Container(
+                        alignment: Alignment.topLeft,
+                        height: Get.height * 0.06,
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: Get.height * 0.01,
+                                  left: Get.width * 0.06),
+                              child: IconButton(
+                                icon: Icon(
+                                  Icons.arrow_back,
+                                  color: Colors.white,
+                                  size: 35,
+                                ),
+                                onPressed: () => Get.back(result: true),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -71,12 +92,25 @@ class ReleasesPage extends GetView<ReleasesController> {
                                     color: Color(0xFFFAFAFA)),
                                 onPressed: () async {
                                   final dateSelected = await showDatePicker(
+                                      context: Get.context,
+                                      locale: Locale('pt'),
                                       initialDate: DateTime.now(),
                                       firstDate: DateTime.now()
                                           .subtract(Duration(days: 365)),
                                       lastDate: DateTime.now()
-                                          .add(Duration(days: 365)),
-                                      context: Get.context);
+                                          .add(Duration(days: 730)),
+                                      builder:
+                                          (BuildContext context, Widget child) {
+                                        return Theme(
+                                          data: ThemeData.light().copyWith(
+                                            colorScheme:
+                                                ColorScheme.light().copyWith(
+                                              primary: Colors.blueGrey,
+                                            ),
+                                          ),
+                                          child: child,
+                                        );
+                                      });
 
                                   if (dateSelected != null &&
                                       dateSelected !=
