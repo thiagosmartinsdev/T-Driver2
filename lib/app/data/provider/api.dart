@@ -76,12 +76,11 @@ class MyApiClient {
   //   } catch (_) {}
   // }
 
-  // delete(obj) async {
-  //   try {
-  //     var response = await httpClient.delete(baseUrl);
-  //     if (response.statusCode == 200) {
-  //     } else
-  //       print('erro -post');
-  //   } catch (_) {}
-  // }
+  delete(id) async {
+    try {
+      db.apagarRegistro(id);
+    } on DatabaseException catch (error) {
+      print(error);
+    }
+  }
 }

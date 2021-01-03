@@ -1,5 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:tdriver2/app/data/model/card_model.dart';
 import 'package:tdriver2/app/data/model/movimentacao.dart';
 import 'package:tdriver2/app/data/repository/releases_repository.dart';
@@ -44,12 +46,16 @@ class HomeController extends GetxController {
     });
   }
 
-  del() {
-    // var db = BD();
-    // db.apagarRegistro(45);
+  delete(int idMovimentacao) {
+    try {
+      repository.delete(idMovimentacao);
+      Get.rawSnackbar(
+          messageText: Text(
+        'Registro removido com sucesso',
+        style: TextStyle(color: Colors.white),
+      ));
+    } on DatabaseException catch (error) {
+      print("Erro ao excluir : " + error.toString());
+    }
   }
-
-  final _obj = ''.obs;
-  set obj(value) => this._obj.value = value;
-  get obj => this._obj.value;
 }

@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -21,8 +22,51 @@ class ListaUltimosLancamentos extends StatelessWidget {
           padding: EdgeInsets.zero,
           itemCount: _.lastReleases.length, //lista.length,
           itemBuilder: (s, index) {
-            return ItemUltimosLancamentos(
-              model: _.lastReleases[index],
+            return Dismissible(
+              key: Key(_.lastReleases[index].idMovimentacao.toString()),
+              direction: DismissDirection.endToStart,
+              background: Container(
+                  color: Colors.red,
+                  padding: EdgeInsets.only(right: 15),
+                  alignment: Alignment.centerRight,
+                  child: RichText(
+                    text: TextSpan(children: [
+                      WidgetSpan(
+                          child: Icon(Icons.delete,
+                              size: 20, color: Colors.white)),
+                      TextSpan(
+                          text: " APAGAR",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                          )),
+                    ]),
+                  )),
+              confirmDismiss: (direction) async {
+                var result;
+
+                await AwesomeDialog(
+                    context: s,
+                    dismissOnTouchOutside: false,
+                    dialogType: DialogType.WARNING,
+                    headerAnimationLoop: false,
+                    animType: AnimType.TOPSLIDE,
+                    title: 'Atenção',
+                    desc: 'Essa operação não poderá ser revertida!',
+                    btnCancelOnPress: () {
+                      result = false;
+                    },
+                    btnOkOnPress: () async {
+                      await _.delete(_.lastReleases[index].idMovimentacao);
+                      _.lastReleases.removeAt(index);
+                      result = true;
+                    }).show();
+
+                return result;
+              },
+              child: ItemUltimosLancamentos(
+                model: _.lastReleases[index],
+              ),
             );
           },
           separatorBuilder: (context, index) {
