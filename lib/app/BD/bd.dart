@@ -124,7 +124,7 @@ class BD extends GetxService {
 
   //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> REGISTROS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-  Future<List<Map<String, dynamic>>> getUltimosLancamentos() async {
+  Future<List<Map<String, dynamic>>> getUltimosLancamentos(ano) async {
     var dbGanho = await db;
 
     try {
@@ -141,6 +141,7 @@ class BD extends GetxService {
           "from $tabelaMovimentacao mm "
           "left join $tabelaEmpresa e on mm.id_empresa = e.id_empresa "
           "left join $tabelaTipoGasto tp on mm.id_tipo_gasto = tp.id_tipo_gasto "
+          "where strftime('%Y', data) == '$ano' "
           "order by mm.id_movimentacao desc  ");
 
       return res.toList();

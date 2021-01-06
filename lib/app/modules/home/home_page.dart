@@ -4,6 +4,7 @@ import 'package:tdriver2/app/modules/home/home_controller.dart';
 import 'package:tdriver2/app/modules/home/widgets/cardHome.dart';
 import 'package:tdriver2/app/modules/home/widgets/lista_ultimos_lancamentos.dart';
 import 'package:tdriver2/app/modules/widgets/backGroundApp.dart';
+import 'package:flutter_datepicker_single/flutter_datepicker_single.dart';
 
 class HomePage extends GetView<HomeController> {
   @override
@@ -23,21 +24,7 @@ class HomePage extends GetView<HomeController> {
               padding: EdgeInsets.only(top: 20),
               child: Column(
                 children: <Widget>[
-                  Container(
-                    height: Get.height * 0.06,
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                              top: Get.height * 0.01, left: Get.width * 0.06),
-                          child: Icon(
-                            Icons.menu,
-                            size: 30,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  Container(height: Get.height * 0.08, child: _menuAndYear()),
                   Container(
                     height: Get.height * 0.4,
                     child: _cards(),
@@ -61,6 +48,52 @@ class HomePage extends GetView<HomeController> {
             ),
           ]),
         ));
+  }
+
+  _menuAndYear() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Padding(
+          padding:
+              EdgeInsets.only(top: Get.height * 0.01, left: Get.width * 0.06),
+          child: Icon(
+            Icons.menu,
+            size: 30,
+          ),
+        ),
+        Padding(
+            padding: EdgeInsets.only(
+                top: Get.height * 0.01, right: Get.width * 0.06),
+            child: MaterialButton(
+              highlightElevation: 10,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
+              elevation: 10,
+              color: Color(0xFF607D8B),
+              animationDuration: Duration(seconds: 1),
+              onPressed: () async {
+                final dateSelected = await showYearPicker(
+                  context: Get.context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime.utc(2008, 1, 1),
+                  lastDate: DateTime.now(),
+                );
+
+                if (dateSelected != null) {
+                  controller.currentYear.value = dateSelected.year;
+                }
+              },
+              child: Obx(
+                () => Text(controller.currentYear.value.toString(),
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold)),
+              ),
+            )),
+      ],
+    );
   }
 
   _cards() {
@@ -129,7 +162,7 @@ class HomePage extends GetView<HomeController> {
               onPressed: () async {
                 var refresh = await Get.toNamed("/cadastro");
                 if (refresh) {
-                  controller.resetHome();
+                  controller.resetHome(true);
                 }
               }),
         ),

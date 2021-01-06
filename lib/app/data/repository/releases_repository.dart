@@ -6,8 +6,8 @@ class ReleasesRepository {
 
   ReleasesRepository({@required this.apiClient}) : assert(apiClient != null);
 
-  getAll() {
-    return apiClient.getAll();
+  getAll(year) {
+    return apiClient.getAll(year);
   }
 
   add(obj) {

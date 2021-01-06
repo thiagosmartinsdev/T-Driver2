@@ -11,11 +11,11 @@ class CardHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetX<HomeController>(builder: (c) {
-      return Container(
-          width: Get.width,
-          height: Get.height * 0.2,
-          child: c.releasesMontlhy.isNotEmpty
+    return Container(
+        width: Get.width,
+        height: Get.height * 0.2,
+        child: GetX<HomeController>(builder: (c) {
+          return c.releasesMontlhy.isNotEmpty
               ? Swiper(
                   itemCount: cardMensal
                       ? c.releasesMontlhy.length
@@ -27,9 +27,6 @@ class CardHome extends StatelessWidget {
                   scale: 1,
                   viewportFraction: 0.90,
                   itemBuilder: (_, index) {
-                    CardModel cards = cardMensal
-                        ? c.releasesMontlhy[index]
-                        : c.releasesWeekly[index];
                     return Card(
                         color:
                             cardMensal ? Color(0xFF607D8B) : Color(0xFF90A4AE),
@@ -41,7 +38,9 @@ class CardHome extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    cardMensal ? cards.name : cards.period,
+                                    cardMensal
+                                        ? c.releasesMontlhy[index].name
+                                        : c.releasesWeekly[index].period,
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 20,
@@ -69,7 +68,13 @@ class CardHome extends StatelessWidget {
                                     Container(
                                       width: Get.width * 0.24,
                                       child: Text(
-                                          cards.earnings.toStringAsFixed(2),
+                                          cardMensal
+                                              ? c.releasesMontlhy[index]
+                                                  .earnings
+                                                  .toStringAsFixed(2)
+                                              : c.releasesWeekly[index].earnings
+                                                  .toStringAsFixed(2),
+                                          // cards.earnings.toStringAsFixed(2),
                                           textAlign: TextAlign.end,
                                           style: TextStyle(
                                               color: Colors.white,
@@ -98,7 +103,14 @@ class CardHome extends StatelessWidget {
                                     Container(
                                       width: Get.width * 0.24,
                                       child: Text(
-                                          cards.expensive.toStringAsFixed(2),
+                                          // cards.expensive.toStringAsFixed(2),
+                                          cardMensal
+                                              ? c.releasesMontlhy[index]
+                                                  .expensive
+                                                  .toStringAsFixed(2)
+                                              : c.releasesWeekly[index]
+                                                  .expensive
+                                                  .toStringAsFixed(2),
                                           textAlign: TextAlign.end,
                                           style: TextStyle(
                                               color: Colors.white,
@@ -112,7 +124,7 @@ class CardHome extends StatelessWidget {
                         ));
                   },
                 )
-              : SizedBox());
-    });
+              : SizedBox();
+        }));
   }
 }

@@ -14,26 +14,32 @@ class HomeController extends GetxController {
   var releasesMontlhy = List<CardModel>().obs;
   var releasesWeekly = List<CardModel>().obs;
 
+  var currentYear = DateTime.now().year.obs;
+
   @override
   Future<void> onInit() async {
-    loadReleases();
+    await loadReleases(true);
     super.onInit();
+
+    ever(currentYear, (value) => resetHome(true));
   }
 
-  resetHome() {
-    lastReleases.clear();
+  resetHome(refreshAll) {
+    if (refreshAll) lastReleases.clear();
     releasesMontlhy.clear();
     releasesWeekly.clear();
 
-    loadReleases();
+    loadReleases(refreshAll);
   }
 
-  Future<void> loadReleases() async {
-    await repository.getAll().then((response) {
+  Future<void> loadReleases(refreshAll) async {
+    await repository.getAll(currentYear).then((response) {
       if (response['releases'] != null) {
-        response['releases'].forEach((element) {
-          lastReleases.add(element);
-        });
+        if (refreshAll) {
+          response['releases'].forEach((element) {
+            lastReleases.add(element);
+          });
+        }
 
         response['monthly'].forEach((element) {
           releasesMontlhy.add(element);
@@ -46,7 +52,7 @@ class HomeController extends GetxController {
     });
   }
 
-  delete(int idMovimentacao) {
+  delete(int idMovimentacao, int index) async {
     try {
       repository.delete(idMovimentacao);
       Get.rawSnackbar(
@@ -54,6 +60,12 @@ class HomeController extends GetxController {
         'Registro removido com sucesso',
         style: TextStyle(color: Colors.white),
       ));
+
+      await Future.delayed(const Duration(milliseconds: 250), () {
+        lastReleases.removeAt(index);
+      });
+
+      resetHome(false);
     } on DatabaseException catch (error) {
       print("Erro ao excluir : " + error.toString());
     }

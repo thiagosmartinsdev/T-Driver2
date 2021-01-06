@@ -9,11 +9,11 @@ class MyApiClient {
   final db = BD();
   MyApiClient({@required db});
 
-  Future getAll() async {
+  Future getAll(currentYear) async {
     try {
-      var releases = await db.getUltimosLancamentos();
-      var monthly = await db.getGanhosMes(2020);
-      var weekly = await db.getGanhosSemana(2020);
+      var releases = await db.getUltimosLancamentos(currentYear.value);
+      var monthly = await db.getGanhosMes(currentYear.value);
+      var weekly = await db.getGanhosSemana(currentYear.value);
       List<MovimentacaoModel> listReleases;
       List<CardModel> listMonthly;
       List<CardModel> listWeekly;
