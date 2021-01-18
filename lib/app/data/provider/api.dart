@@ -56,25 +56,25 @@ class MyApiClient {
     }
   }
 
-  // getId(id) async {
-  //   try {
-  //     var response = await httpClient.get(baseUrl);
-  //     if (response.statusCode == 200) {
-  //       Map<String, dynamic> jsonResponse = json.decode(response.body);
-  //     } else
-  //       print('erro -get');
-  //   } catch (_) {}
-  // }
+  getId(obj) async {
+    try {
+      var resume = await db.getResumoMensalSemanal(int.parse(obj.year),
+          mes: obj.numMes,
+          dataInicial: obj.dataInicial,
+          dataFinal: obj.dataFinal);
 
-  // edit(obj) async {
-  //   try {
-  //     var response = await httpClient.put(baseUrl,
-  //         headers: {'Content-Type': 'application/json'}, body: jsonEncode(obj));
-  //     if (response.statusCode == 200) {
-  //     } else
-  //       print('erro -post');
-  //   } catch (_) {}
-  // }
+      List<MovimentacaoModel> releasesResume;
+
+      if (resume.length != 0) {
+        releasesResume = resume.map<MovimentacaoModel>((map) {
+          return MovimentacaoModel.sqlFromMap(map);
+        }).toList();
+      }
+      return releasesResume;
+    } on Error catch (e) {
+      print(e);
+    }
+  }
 
   delete(id) async {
     try {

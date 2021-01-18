@@ -158,14 +158,14 @@ class BD extends GetxService {
     try {
       var res = await dbGanho.rawQuery(""
               "select "
-              "   mm.id_movimentacao as id, "
+              "   mm.id_movimentacao , "
               "   case "
               "     when mm.id_empresa not null then e.descricao "
               "     when mm.id_tipo_gasto not null then tp.descricao "
               "     end as motivo, "
               "   mm.id_tipo_movimentacao as tipoMov, "
               "   mm.valor, "
-              "   strftime('%d/%m/%Y' ,mm.data) as data "
+              "   mm.data "
               "from $tabelaMovimentacao mm "
               "left join $tabelaEmpresa e on mm.id_empresa = e.id_empresa "
               "left join $tabelaTipoGasto tp on mm.id_tipo_gasto = tp.id_tipo_gasto " +

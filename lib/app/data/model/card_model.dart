@@ -5,8 +5,20 @@ class CardModel {
   double earnings;
   double expensive;
   String period;
+  String numMes;
+  DateTime dataInicial;
+  DateTime dataFinal;
 
-  CardModel({id, name, year, gain, expensive, period});
+  CardModel(
+      {id,
+      name,
+      year,
+      gain,
+      expensive,
+      period,
+      numMes,
+      dataInicial,
+      dataFinal});
 
   CardModel.sqlFromMap(Map<String, dynamic> json) {
     double ganhos = json['ganhos'];
@@ -18,11 +30,8 @@ class CardModel {
     this.earnings = ganhos ??= 0.00;
     this.expensive = gastos ??= 0.00;
     this.period = json['periodo'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    return data;
+    this.numMes = json['numMes'];
+    this.dataInicial = json['dataInicial'];
+    this.dataFinal = json['dataFinal'];
   }
 }

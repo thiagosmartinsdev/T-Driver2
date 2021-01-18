@@ -17,29 +17,31 @@ class HomeController extends GetxController {
   var currentYear = DateTime.now().year.obs;
 
   @override
-  Future<void> onInit() async {
-    await loadReleases(true);
+  onInit() {
     super.onInit();
 
-    ever(currentYear, (value) => resetHome(true));
+    ever(currentYear, (value) => resetHome());
   }
 
-  resetHome(refreshAll) {
-    if (refreshAll) lastReleases.clear();
+  @override
+  onReady() {
+    loadReleases();
+  }
+
+  resetHome() {
+    lastReleases.clear();
     releasesMontlhy.clear();
     releasesWeekly.clear();
 
-    loadReleases(refreshAll);
+    loadReleases();
   }
 
-  Future<void> loadReleases(refreshAll) async {
+  Future<void> loadReleases() async {
     await repository.getAll(currentYear).then((response) {
       if (response['releases'] != null) {
-        if (refreshAll) {
-          response['releases'].forEach((element) {
-            lastReleases.add(element);
-          });
-        }
+        response['releases'].forEach((element) {
+          lastReleases.add(element);
+        });
 
         response['monthly'].forEach((element) {
           releasesMontlhy.add(element);
@@ -65,7 +67,7 @@ class HomeController extends GetxController {
         lastReleases.removeAt(index);
       });
 
-      resetHome(false);
+      resetHome();
     } on DatabaseException catch (error) {
       print("Erro ao excluir : " + error.toString());
     }

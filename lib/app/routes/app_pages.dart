@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:tdriver2/app/modules/details/details_binding.dart';
+import 'package:tdriver2/app/modules/details/details_page.dart';
 import 'package:tdriver2/app/modules/releases/releases_binding.dart';
 import 'package:tdriver2/app/modules/releases/releases_page.dart';
 import 'package:tdriver2/app/modules/home/home_page.dart';
@@ -13,6 +15,10 @@ abstract class AppPages {
     GetPage(
         name: Routes.CADASTRO,
         page: () => ReleasesPage(),
-        binding: ReleasesBinding())
+        binding: ReleasesBinding()),
+    GetPage(
+        name: Routes.DETAIL,
+        page: () => DetailsPage(),
+        binding: DetailsBinding())
   ];
 }

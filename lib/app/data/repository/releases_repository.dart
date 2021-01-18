@@ -14,14 +14,11 @@ class ReleasesRepository {
     return apiClient.add(obj);
   }
 
-// getId(id){
-//   return apiClient.getId(id);
-// }
+  getId(obj) {
+    return apiClient.getId(obj);
+  }
+
   delete(id) {
     return apiClient.delete(id);
   }
-// edit(obj){
-//   return apiClient.edit( obj );
-// }
-
 }

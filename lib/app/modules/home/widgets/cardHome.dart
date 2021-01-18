@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:get/get.dart';
-import 'package:tdriver2/app/data/model/card_model.dart';
 import 'package:tdriver2/app/modules/home/home_controller.dart';
 
 class CardHome extends StatelessWidget {
@@ -37,14 +36,22 @@ class CardHome extends StatelessWidget {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    cardMensal
-                                        ? c.releasesMontlhy[index].name
-                                        : c.releasesWeekly[index].period,
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
+                                  GestureDetector(
+                                    onTap: () => Get.toNamed(
+                                      "details",
+                                      arguments: cardMensal
+                                          ? c.releasesMontlhy[index]
+                                          : c.releasesWeekly[index],
+                                    ),
+                                    child: Text(
+                                      cardMensal
+                                          ? c.releasesMontlhy[index].name
+                                          : c.releasesWeekly[index].period,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                   )
                                 ],
                               ),

@@ -76,7 +76,7 @@ class HomePage extends GetView<HomeController> {
                 final dateSelected = await showYearPicker(
                   context: Get.context,
                   initialDate: DateTime.now(),
-                  firstDate: DateTime.utc(2008, 1, 1),
+                  firstDate: DateTime.utc(2014, 1, 1),
                   lastDate: DateTime.now(),
                 );
 
@@ -148,7 +148,7 @@ class HomePage extends GetView<HomeController> {
                   ]), //Colors.orange[200]]),
               boxShadow: [
                 BoxShadow(
-                    color: Color(0xFF263238), blurRadius: 20, spreadRadius: 1)
+                    color: Color(0xFF263238), blurRadius: 10, spreadRadius: 1)
               ],
               border: Border.all(color: Color(0xFF90A4AE), width: 3),
               borderRadius: BorderRadius.circular(15)),
@@ -160,10 +160,8 @@ class HomePage extends GetView<HomeController> {
                 size: 40,
               ),
               onPressed: () async {
-                var refresh = await Get.toNamed("/cadastro");
-                if (refresh) {
-                  controller.resetHome(true);
-                }
+                await Get.toNamed("/cadastro");
+                controller.resetHome();
               }),
         ),
       ),
