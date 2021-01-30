@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:tdriver2/app/modules/releases/releases_controller.dart';
 import 'package:brasil_fields/brasil_fields.dart';
-import 'package:tdriver2/app/modules/widgets/backGroundApp.dart';
+import 'package:tdriver2/app/modules/widgets/background_app.dart';
 
 class ReleasesPage extends GetView<ReleasesController> {
   final durationAni = Duration(milliseconds: 300);
@@ -312,6 +312,7 @@ class ReleasesPage extends GetView<ReleasesController> {
                 Get.context, controller.uberNode, controller.popNode);
           },
           keyboardType: TextInputType.numberWithOptions(decimal: true),
+          keyboardAppearance: Brightness.light,
           validator: (value) => controller.validator(value),
         ),
         TextFormField(

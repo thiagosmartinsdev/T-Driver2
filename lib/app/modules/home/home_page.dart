@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tdriver2/app/modules/home/home_controller.dart';
-import 'package:tdriver2/app/modules/home/widgets/cardHome.dart';
 import 'package:tdriver2/app/modules/home/widgets/lista_ultimos_lancamentos.dart';
-import 'package:tdriver2/app/modules/widgets/backGroundApp.dart';
+import 'package:tdriver2/app/modules/home/widgets/swipper_cards.dart';
+import 'package:tdriver2/app/modules/widgets/EmptyLIst.dart';
+import 'package:tdriver2/app/modules/widgets/background_app.dart';
 import 'package:flutter_datepicker_single/flutter_datepicker_single.dart';
 
 class HomePage extends GetView<HomeController> {
+  GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,39 +16,61 @@ class HomePage extends GetView<HomeController> {
         resizeToAvoidBottomPadding: true,
         backgroundColor: Color(0xFFFAFAFA),
         extendBody: true,
+        key: _drawerKey,
+        drawer: Drawer(
+            // key: _drawerKey,
+            child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              child: Text("TDriver"),
+              decoration: BoxDecoration(color: Colors.white38),
+            ),
+            ListTile(
+              title: Text("Taxa de  Aceitação"),
+            )
+          ],
+        )),
         body: SafeArea(
           top: false,
           bottom: false,
-          child: Stack(children: [
-            BackGrroundApp(),
-            Container(
-              height: double.infinity,
-              padding: EdgeInsets.only(top: 20),
-              child: Column(
-                children: <Widget>[
-                  Container(height: Get.height * 0.08, child: _menuAndYear()),
-                  Container(
-                    height: Get.height * 0.4,
-                    child: _cards(),
-                  ),
-                  Container(
-                    child: _textoUltimosLancamentos(),
-                  ),
-                  Expanded(
-                    child: Container(
-                      width: Get.width,
-                      child: Stack(
-                        children: [
-                          _listaUltimosLancamentos(),
-                          _buttomAdd(),
+          child: Obx(
+            () => Stack(children: [
+              BackGrroundApp(),
+              controller.lastReleases.isEmpty
+                  ? ListaVazia()
+                  : Container(
+                      height: double.infinity,
+                      padding: EdgeInsets.only(top: Get.height * 0.09),
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            height: Get.height * 0.4,
+                            child: _cards(),
+                          ),
+                          Container(
+                            child: _textLasReleases(),
+                          ),
+                          Expanded(
+                            child: Container(
+                              width: Get.width,
+                              child: Stack(
+                                children: [
+                                  _listLastReleases(),
+                                ],
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-          ]),
+              Container(
+                  padding: EdgeInsets.only(top: Get.height * 0.03),
+                  height: Get.height * 0.09,
+                  child: _menuAndYear()),
+              _buttomAdd(),
+            ]),
+          ),
         ));
   }
 
@@ -57,9 +81,13 @@ class HomePage extends GetView<HomeController> {
         Padding(
           padding:
               EdgeInsets.only(top: Get.height * 0.01, left: Get.width * 0.06),
-          child: Icon(
-            Icons.menu,
-            size: 30,
+          child: IconButton(
+            onPressed: () => _drawerKey.currentState.openDrawer(),
+            icon: Icon(
+              Icons.menu,
+              size: 30,
+            ),
+            color: Colors.white,
           ),
         ),
         Padding(
@@ -97,17 +125,10 @@ class HomePage extends GetView<HomeController> {
   }
 
   _cards() {
-    return SizedBox(
-        height: Get.height * 0.40,
-        child: Column(
-          children: <Widget>[
-            CardHome(cardMensal: false),
-            CardHome(cardMensal: true),
-          ],
-        ));
+    return SizedBox(height: Get.height * 0.40, child: SwipperCards());
   }
 
-  _textoUltimosLancamentos() {
+  _textLasReleases() {
     return Container(
       width: Get.width,
       height: Get.height * 0.067,
@@ -120,7 +141,7 @@ class HomePage extends GetView<HomeController> {
     );
   }
 
-  _listaUltimosLancamentos() {
+  _listLastReleases() {
     return Center(
       child: Container(
         width: Get.width * 0.95,
@@ -160,8 +181,8 @@ class HomePage extends GetView<HomeController> {
                 size: 40,
               ),
               onPressed: () async {
-                await Get.toNamed("/cadastro");
-                controller.resetHome();
+                var refresh = await Get.toNamed("/cadastro");
+                if (refresh) controller.resetHome();
               }),
         ),
       ),

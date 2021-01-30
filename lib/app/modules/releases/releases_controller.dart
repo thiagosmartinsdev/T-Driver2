@@ -1,16 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
 import 'package:tdriver2/app/data/model/movimentacao.dart';
 import 'package:tdriver2/app/data/repository/releases_repository.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:tdriver2/app/modules/home/home_controller.dart';
 
 class ReleasesController extends GetxController {
   final ReleasesRepository repository;
   ReleasesController({@required this.repository}) : assert(repository != null);
 
+  final HomeController homeController = Get.find();
   final oppened = true.obs;
 
   final formKey = GlobalKey<FormState>();
@@ -44,6 +47,7 @@ class ReleasesController extends GetxController {
   @override
   void onInit() {
     txtDate.text = DateFormat("dd/MM/yyyy").format(DateTime.now()).toString();
+    super.onInit();
   }
 
   fieldFocusChange(
@@ -124,6 +128,12 @@ class ReleasesController extends GetxController {
 
       try {
         repository.add(listaMovimentacoes);
+
+        var user = GetStorage();
+        if (user.read('newUser')) {
+          user.write('newUser', false);
+        }
+        homeController.newUser.value = false;
 
         AwesomeDialog(
             context: Get.context,

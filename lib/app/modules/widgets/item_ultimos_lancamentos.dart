@@ -21,8 +21,8 @@ class ItemUltimosLancamentos extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             boxShadow: [
               BoxShadow(
-                  blurRadius: 2,
-                  spreadRadius: 1,
+                  blurRadius: 3,
+                  spreadRadius: 3,
                   offset: Offset(1, 4),
                   color: Colors.black45)
             ]),
@@ -38,8 +38,7 @@ class ItemUltimosLancamentos extends StatelessWidget {
                   : Colors.red[400],
             ),
             Container(
-              width: Get.width * 0.5,
-              padding: EdgeInsets.only(left: 2),
+              width: Get.width * 0.45,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -56,7 +55,7 @@ class ItemUltimosLancamentos extends StatelessWidget {
               ),
             ),
             Container(
-              width: Get.width * 0.27,
+              width: Get.width * 0.3,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,

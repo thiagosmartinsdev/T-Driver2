@@ -305,7 +305,7 @@ class BD extends GetxService {
         " when '10' then 'Outubro' "
         " when '11' then 'Novembro' "
         " when '12' then 'Dezembro' "
-        " end as name, "
+        " end as periodo, "
         " strftime('%m', data) as numMes, "
         " strftime('%Y', data) as ano, "
         " sum( "

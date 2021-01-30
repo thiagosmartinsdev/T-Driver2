@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 final ThemeData appThemeData = ThemeData(
     primaryColor: Color(0xFF546E7A),
@@ -11,6 +12,7 @@ final ThemeData appThemeData = ThemeData(
           borderRadius: BorderRadius.circular(20),
           // side: BorderSide(color: Color(0xFF006064))
         )),
+    textTheme: GoogleFonts.mcLarenTextTheme(),
     dividerColor: Colors.transparent);
 
 // COR CINZA DESTAQUE 0XFFF2F5F9

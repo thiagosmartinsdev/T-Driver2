@@ -13,15 +13,15 @@ class CardHome extends StatelessWidget {
     return Container(
         width: Get.width,
         height: Get.height * 0.2,
-        child: GetX<HomeController>(builder: (c) {
-          return c.releasesMontlhy.isNotEmpty
+        child: GetBuilder<HomeController>(builder: (controller) {
+          var cardData = cardMensal
+              ? controller.releasesMontlhy
+              : controller.releasesWeekly;
+
+          return controller.releasesMontlhy.isNotEmpty
               ? Swiper(
-                  itemCount: cardMensal
-                      ? c.releasesMontlhy.length
-                      : c.releasesWeekly.length,
-                  index: cardMensal
-                      ? c.releasesMontlhy.length - 1
-                      : c.releasesWeekly.length - 1,
+                  itemCount: cardData.length,
+                  index: cardData.length - 1,
                   loop: false,
                   scale: 1,
                   viewportFraction: 0.90,
@@ -37,16 +37,15 @@ class CardHome extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   GestureDetector(
-                                    onTap: () => Get.toNamed(
-                                      "details",
-                                      arguments: cardMensal
-                                          ? c.releasesMontlhy[index]
-                                          : c.releasesWeekly[index],
-                                    ),
+                                    onTap: () async {
+                                      var refresh = await Get.toNamed(
+                                        "details",
+                                        arguments: cardData[index],
+                                      );
+                                      if (refresh) controller.resetHome();
+                                    },
                                     child: Text(
-                                      cardMensal
-                                          ? c.releasesMontlhy[index].name
-                                          : c.releasesWeekly[index].period,
+                                      cardData[index].period,
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 20,
@@ -75,13 +74,9 @@ class CardHome extends StatelessWidget {
                                     Container(
                                       width: Get.width * 0.24,
                                       child: Text(
-                                          cardMensal
-                                              ? c.releasesMontlhy[index]
-                                                  .earnings
-                                                  .toStringAsFixed(2)
-                                              : c.releasesWeekly[index].earnings
-                                                  .toStringAsFixed(2),
-                                          // cards.earnings.toStringAsFixed(2),
+                                          cardData[index]
+                                              .earnings
+                                              .toStringAsFixed(2),
                                           textAlign: TextAlign.end,
                                           style: TextStyle(
                                               color: Colors.white,
@@ -110,14 +105,9 @@ class CardHome extends StatelessWidget {
                                     Container(
                                       width: Get.width * 0.24,
                                       child: Text(
-                                          // cards.expensive.toStringAsFixed(2),
-                                          cardMensal
-                                              ? c.releasesMontlhy[index]
-                                                  .expensive
-                                                  .toStringAsFixed(2)
-                                              : c.releasesWeekly[index]
-                                                  .expensive
-                                                  .toStringAsFixed(2),
+                                          cardData[index]
+                                              .expensive
+                                              .toStringAsFixed(2),
                                           textAlign: TextAlign.end,
                                           style: TextStyle(
                                               color: Colors.white,

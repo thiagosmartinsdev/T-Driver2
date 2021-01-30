@@ -1,7 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
-import 'package:tdriver2/app/data/home_service.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:tdriver2/app/data/service/home_service.dart';
 import 'package:tdriver2/app/modules/home/home_binding.dart';
 import 'app/modules/home/home_page.dart';
 import 'app/routes/app_pages.dart';
@@ -17,6 +18,7 @@ Future<void> main() async {
       systemNavigationBarIconBrightness: Brightness.light));
   WidgetsFlutterBinding.ensureInitialized();
 
+  await GetStorage.init();
   await initServices();
 
   runApp(GetMaterialApp(

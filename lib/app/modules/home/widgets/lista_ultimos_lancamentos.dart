@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:tdriver2/app/modules/home/home_controller.dart';
 
-import 'package:tdriver2/app/modules/home/widgets/item_ultimos_lancamentos.dart';
+import 'package:tdriver2/app/modules/widgets/item_ultimos_lancamentos.dart';
 
 class ListaUltimosLancamentos extends StatelessWidget {
   ListaUltimosLancamentos({Key key}) : super(key: key);
@@ -22,7 +22,8 @@ class ListaUltimosLancamentos extends StatelessWidget {
             key: Key(_.lastReleases[index].idMovimentacao.toString()),
             direction: DismissDirection.endToStart,
             background: Container(
-                color: Colors.red,
+                decoration: BoxDecoration(
+                    color: Colors.red, borderRadius: BorderRadius.circular(10)),
                 padding: EdgeInsets.only(right: 15),
                 alignment: Alignment.centerRight,
                 child: RichText(
@@ -34,6 +35,7 @@ class ListaUltimosLancamentos extends StatelessWidget {
                         text: " APAGAR",
                         style: TextStyle(
                           color: Colors.white,
+                          fontWeight: FontWeight.bold,
                           fontSize: 20,
                         )),
                   ]),
@@ -56,7 +58,7 @@ class ListaUltimosLancamentos extends StatelessWidget {
                     result = true;
                   }).show();
 
-              if (result) _.delete(_.lastReleases[index].idMovimentacao, index);
+              if (result) _.delete(_.lastReleases[index], index);
 
               return result;
             },

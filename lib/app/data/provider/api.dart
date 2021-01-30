@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:tdriver2/app/BD/bd.dart';
+import 'package:tdriver2/app/database/bd.dart';
 import 'package:tdriver2/app/data/model/card_model.dart';
 
 import 'package:tdriver2/app/data/model/movimentacao.dart';
@@ -78,7 +78,7 @@ class MyApiClient {
 
   delete(id) async {
     try {
-      db.apagarRegistro(id);
+      await db.apagarRegistro(id);
     } on DatabaseException catch (error) {
       print(error);
     }
