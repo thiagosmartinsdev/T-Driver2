@@ -139,13 +139,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_datepicker_single:
-    dependency: "direct main"
-    description:
-      name: flutter_datepicker_single
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.1+1"
   flutter_localizations:
     dependency: "direct main"
     description: flutter

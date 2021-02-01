@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:tdriver2/app/modules/details/details_binding.dart';
 import 'package:tdriver2/app/modules/details/details_page.dart';
+import 'package:tdriver2/app/modules/home/widgets/calculo_aceitacao.dart';
 import 'package:tdriver2/app/modules/releases/releases_binding.dart';
 import 'package:tdriver2/app/modules/releases/releases_page.dart';
 import 'package:tdriver2/app/modules/home/home_page.dart';
@@ -19,6 +20,7 @@ abstract class AppPages {
     GetPage(
         name: Routes.DETAIL,
         page: () => DetailsPage(),
-        binding: DetailsBinding())
+        binding: DetailsBinding()),
+    GetPage(name: Routes.ACCEPTANCE, page: () => CalculoAceitacaoPage())
   ];
 }

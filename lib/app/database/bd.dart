@@ -52,7 +52,6 @@ class BD extends GetxService {
     // Directory faz parte do plugin dart:io e o getApplicationDocumentsDirectory() faz parte do path_provider
     // aqui nós estamos acessando o diretório nativo do android
 
-    print(">>>>>>>>>>>>> INIT DB CALLED<<<<<<<<<<<<<");
     Directory documentoDiretorio = await getApplicationDocumentsDirectory();
 
     // o join() junta duas coisas, no caso iremos juntar o diretorio juntamente com o nosso banco de dados
@@ -61,8 +60,6 @@ class BD extends GetxService {
     // após ter acesso ao local do nosso BD, iremos abri-lo
     Database nossoBD =
         await openDatabase(caminho, version: 1, onCreate: _onCreate);
-
-    print(">>>>>>>>>>>>> CLOSE DB CALLED<<<<<<<<<<<<<");
 
     _db = nossoBD;
 

@@ -3,12 +3,12 @@ import 'package:get/get.dart';
 import 'package:tdriver2/app/modules/home/home_controller.dart';
 import 'package:tdriver2/app/modules/home/widgets/lista_ultimos_lancamentos.dart';
 import 'package:tdriver2/app/modules/home/widgets/swipper_cards.dart';
+import 'package:tdriver2/app/modules/home/widgets/year_date_picker.dart';
 import 'package:tdriver2/app/modules/widgets/EmptyLIst.dart';
 import 'package:tdriver2/app/modules/widgets/background_app.dart';
-import 'package:flutter_datepicker_single/flutter_datepicker_single.dart';
 
 class HomePage extends GetView<HomeController> {
-  GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
+  final GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,19 +18,51 @@ class HomePage extends GetView<HomeController> {
         extendBody: true,
         key: _drawerKey,
         drawer: Drawer(
-            // key: _drawerKey,
-            child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              child: Text("TDriver"),
-              decoration: BoxDecoration(color: Colors.white38),
-            ),
-            ListTile(
-              title: Text("Taxa de  Aceitação"),
-            )
-          ],
-        )),
+            child: Container(
+                color: Colors.black38,
+                child: Stack(
+                  children: [
+                    BackGrroundApp(),
+                    ListView(
+                      padding: EdgeInsets.zero,
+                      children: [
+                        Container(
+                          height: Get.height * 0.2,
+                          child: DrawerHeader(
+                            child: Center(
+                                child: Text(
+                              "TDriver",
+                              style: TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: Get.width * 0.1),
+                            )),
+                            decoration: BoxDecoration(color: Colors.white38),
+                          ),
+                        ),
+                        ListTile(
+                            leading: Text(
+                              '%',
+                              style: TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            title: Text(
+                              "Taxa de  Aceitação",
+                              style: TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            onTap: () async {
+                              final accpetance =
+                                  await Get.toNamed('/acceptance');
+                              if (accpetance) Get.back();
+                            }),
+                      ],
+                    ),
+                  ],
+                ))),
         body: SafeArea(
           top: false,
           bottom: false,
@@ -102,6 +134,7 @@ class HomePage extends GetView<HomeController> {
               animationDuration: Duration(seconds: 1),
               onPressed: () async {
                 final dateSelected = await showYearPicker(
+                  title: Text("Selecione o ano"),
                   context: Get.context,
                   initialDate: DateTime.now(),
                   firstDate: DateTime.utc(2014, 1, 1),
