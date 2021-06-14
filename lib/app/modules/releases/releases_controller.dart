@@ -11,7 +11,7 @@ import 'package:tdriver2/app/modules/home/home_controller.dart';
 
 class ReleasesController extends GetxController {
   final ReleasesRepository repository;
-  ReleasesController({@required this.repository}) : assert(repository != null);
+  ReleasesController({required this.repository}) : assert(repository != null);
 
   final HomeController homeController = Get.find();
   final oppened = true.obs;
@@ -39,11 +39,9 @@ class ReleasesController extends GetxController {
   final manutencaoNode = FocusNode();
 
   final visible = true.obs;
+  final preventPop = false.obs;
 
-  List<MovimentacaoModel> listaMovimentacoes = List();
-
-  // HomeController homeControl = Get.find();
-
+  List<MovimentacaoModel> listaMovimentacoes = [];
   @override
   void onInit() {
     txtDate.text = DateFormat("dd/MM/yyyy").format(DateTime.now()).toString();
@@ -86,7 +84,7 @@ class ReleasesController extends GetxController {
   }
 
   Future save() async {
-    if (!formKey.currentState.validate()) {
+    if (!formKey.currentState!.validate()) {
       return false;
     } else {
       if (txtUber.text.isNotEmpty)
@@ -136,7 +134,7 @@ class ReleasesController extends GetxController {
         homeController.newUser.value = false;
 
         AwesomeDialog(
-            context: Get.context,
+            context: Get.context!,
             animType: AnimType.SCALE,
             headerAnimationLoop: true,
             dialogType: DialogType.SUCCES,
@@ -147,9 +145,33 @@ class ReleasesController extends GetxController {
               resetForm();
             })
           ..show();
+        preventPop.value = false;
       } on Exception catch (e) {
         print(e);
       }
     }
+  }
+
+  canPop() async {
+    var canPop = true;
+
+    if (preventPop.value) {
+      await AwesomeDialog(
+          context: Get.context!,
+          dismissOnTouchOutside: false,
+          dialogType: DialogType.WARNING,
+          headerAnimationLoop: false,
+          animType: AnimType.TOPSLIDE,
+          title: 'Atenção',
+          desc: 'As alterações não foram salvas, tem certeza que deseja sair?',
+          btnCancelOnPress: () {
+            canPop = false;
+          },
+          btnOkOnPress: () async {
+            canPop = true;
+          }).show();
+    }
+
+    return canPop;
   }
 }

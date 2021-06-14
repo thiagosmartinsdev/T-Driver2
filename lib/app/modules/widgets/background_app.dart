@@ -4,20 +4,35 @@ import 'package:get/get.dart';
 class BackGrroundApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        ClipPath(
-          clipper: MyCustomClipper(),
-          child: Container(
-              width: Get.width, height: Get.height, color: Color(0xFF546E7A)),
-        ),
-        ClipPath(
-          clipper: MyCustomClipperBottom(),
-          child: Container(
-              width: Get.width, height: Get.height, color: Color(0xFF546E7A)),
-        ),
-      ],
-    );
+    return LayoutBuilder(builder: (builder, constraints) {
+      return Stack(
+        children: [
+          ClipPath(
+            clipper: MyCustomClipper(),
+            child: Container(
+              width: constraints.maxWidth,
+              height: constraints.maxHeight,
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [Color(0xFF546E7A), Color(0xFF35454d)])),
+            ),
+          ),
+          ClipPath(
+            clipper: MyCustomClipperBottom(constraints),
+            child: Container(
+                width: constraints.maxWidth,
+                height: constraints.maxHeight,
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                        colors: [Color(0xFF546E7A), Color(0xFF35454d)]))),
+          ),
+        ],
+      );
+    });
   }
 }
 
@@ -41,17 +56,27 @@ class MyCustomClipper extends CustomClipper<Path> {
 }
 
 class MyCustomClipperBottom extends CustomClipper<Path> {
+  final BoxConstraints constraints;
+
+  MyCustomClipperBottom(this.constraints);
   @override
   Path getClip(Size size) {
     Path path = Path();
-    path.moveTo(0, Get.height * 0.8);
-    path.quadraticBezierTo(Get.width * 0.02, Get.height * 0.76,
-        Get.width * 0.13, Get.height * 0.8);
-    path.lineTo(Get.width * 0.57, size.height * 0.96);
-    path.quadraticBezierTo(
-        Get.width * 0.61, Get.height * 0.98, Get.width * 0.57, Get.height);
 
-    path.lineTo(0, size.height);
+    path.moveTo(0, constraints.maxHeight * 0.8);
+    path.quadraticBezierTo(
+        constraints.maxWidth * 0.02,
+        constraints.maxHeight * 0.76,
+        constraints.maxWidth * 0.13,
+        constraints.maxHeight * 0.8);
+    path.lineTo(constraints.maxWidth * 0.57, constraints.maxHeight * 0.96);
+    path.quadraticBezierTo(
+        constraints.maxWidth * 0.61,
+        constraints.maxHeight * 0.98,
+        constraints.maxWidth * 0.57,
+        constraints.maxHeight);
+
+    path.lineTo(0, constraints.maxHeight);
 
     return path;
   }

@@ -21,6 +21,8 @@ abstract class AppPages {
         name: Routes.DETAIL,
         page: () => DetailsPage(),
         binding: DetailsBinding()),
-    GetPage(name: Routes.ACCEPTANCE, page: () => CalculoAceitacaoPage())
+    GetPage(
+      name: Routes.ACCEPTANCE, 
+      page: () => CalculoAceitacaoPage())
   ];
 }

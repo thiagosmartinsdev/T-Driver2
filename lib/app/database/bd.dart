@@ -5,7 +5,6 @@ import 'package:tdriver2/app/data/model/movimentacao.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:date_utils/date_utils.dart';
 
 class BD extends GetxService {
   // criaremos uma variável static, pois nunca irá mudar
@@ -33,31 +32,22 @@ class BD extends GetxService {
 
   final String tabelaTipoMovimentacao = 'tipo_movimentacao';
 
-  //Database é a classe do SQFlite que iremos usar, por isso iremos criá-la
-  static Database _db;
+  static Database? _db;
 
-  Future<Database> get db async {
-    // se o _db existe na memória
+  Future<Database?> get db async {
     if (_db != null) {
-      //caso exista, retorna este _bd existente
       return _db;
     }
-    // chamamos agora o initBd que irá iniciar o nosso banco de dados
     initBd();
     return _db;
   }
 
   // iniciando nosso banco de dados em async pois ele é uma transição
   Future<Database> initBd() async {
-    // Directory faz parte do plugin dart:io e o getApplicationDocumentsDirectory() faz parte do path_provider
-    // aqui nós estamos acessando o diretório nativo do android
-
     Directory documentoDiretorio = await getApplicationDocumentsDirectory();
 
-    // o join() junta duas coisas, no caso iremos juntar o diretorio juntamente com o nosso banco de dados
     String caminho = join(documentoDiretorio.path, "bd_principal.db");
 
-    // após ter acesso ao local do nosso BD, iremos abri-lo
     Database nossoBD =
         await openDatabase(caminho, version: 1, onCreate: _onCreate);
 
@@ -125,7 +115,7 @@ class BD extends GetxService {
     var dbGanho = await db;
 
     try {
-      var res = await dbGanho.rawQuery(""
+      var res = await dbGanho!.rawQuery(""
           "select "
           "   mm.id_movimentacao, "
           " case "
@@ -143,17 +133,19 @@ class BD extends GetxService {
 
       return res.toList();
     } on DatabaseException catch (e) {
-      print("Erro: '$e'");
+      throw (e);
     }
 
-    return List();
+    // return [];
   }
 
   Future<List> getResumoMensalSemanal(int ano,
-      {String mes, DateTime dataInicial, DateTime dataFinal}) async {
+      {required String? mes,
+      required DateTime? dataInicial,
+      required DateTime? dataFinal}) async {
     var dbGanho = await db;
     try {
-      var res = await dbGanho.rawQuery(""
+      var res = await dbGanho!.rawQuery(""
               "select "
               "   mm.id_movimentacao , "
               "   case "
@@ -173,15 +165,14 @@ class BD extends GetxService {
 
       return res.toList();
     } on Exception catch (e) {
-      print("Erro: '$e'");
+      throw (e);
     }
-    return new List();
   }
 
   apagarRegistro(int idRegistro) async {
     var banco = await db;
     try {
-      return await banco.delete(tabelaMovimentacao,
+      return await banco!.delete(tabelaMovimentacao,
           where: "id_movimentacao = ?", whereArgs: [idRegistro]);
     } on DatabaseException catch (e) {
       print(e);
@@ -198,8 +189,8 @@ class BD extends GetxService {
       MovimentacaoModel movimentacaoMotorista) async {
     var banco = await db;
     try {
-      return await banco.insert(
-          "$tabelaMovimentacao", movimentacaoMotorista.toMap());
+      return await banco!
+          .insert("$tabelaMovimentacao", movimentacaoMotorista.toMap());
     } on DatabaseException catch (e) {
       print("ERRO: $e");
     }
@@ -209,8 +200,9 @@ class BD extends GetxService {
 
   Future<List> getGanhosSemana(int ano) async {
     var banco = await db;
+    List flist = [];
 
-    List lista = await banco.rawQuery("select "
+    List lista = await banco!.rawQuery("select "
         "m.id_movimentacao as id, "
         "m.id_tipo_movimentacao as idMovimentacao, "
         "m.valor, "
@@ -219,12 +211,17 @@ class BD extends GetxService {
         "where strftime('%Y', data) == '$ano' "
         "order by data ");
 
-    return _buildWeeklyList(lista).toList();
+    try {
+      flist = _buildWeeklyList(lista).toList();
+    } on Exception catch (e) {
+      print(e);
+    }
+
+    return flist;
   }
 
   List _buildWeeklyList(List li) {
-    List<Map> makedList = new List();
-    int id;
+    List<Map> makedList = [];
     DateTime initialDate;
     DateTime lastDate;
     double ganhos = 0;
@@ -235,59 +232,58 @@ class BD extends GetxService {
 
     // ignore: unnecessary_statements
     for (x; x < li.length; x++) {
-      if (x != 39) {
-        var lista = li[x];
-        initialDate = Utils.firstDayOfWeek(DateTime.parse(lista['data']));
-        lastDate = Utils.lastDayOfWeek(DateTime.parse(lista['data']));
+      var lista = li[x];
+      DateTime date = DateTime.parse(lista['data']);
+      initialDate = date.subtract(Duration(days: date.weekday - 1));
+      initialDate = DateTime(
+          initialDate.year, initialDate.month, initialDate.day, 0, 0, 0);
+      lastDate = date.add(Duration(days: DateTime.daysPerWeek - date.weekday));
+      lastDate =
+          DateTime(lastDate.year, lastDate.month, lastDate.day, 23, 59, 59);
 
-        // ignore: unnecessary_statements
-        for (y; y < li.length; y++) {
-          var lista = li[y];
-          if ((DateTime.parse(lista['data']).compareTo(initialDate) == 0 ||
-                  DateTime.parse(lista['data']).isAfter(initialDate)) &&
-              (DateTime.parse(lista['data']).compareTo(lastDate) == 0 ||
-                  DateTime.parse(lista['data']).isBefore(lastDate))) {
-            if (lista['idMovimentacao'] == 1) {
-              ganhos += lista['valor'];
-            } else {
-              gastos += lista['valor'];
-            }
+      for (y; y < li.length; y++) {
+        var lista = li[y];
+        if ((DateTime.parse(lista['data']).compareTo(initialDate) == 0 ||
+                DateTime.parse(lista['data']).isAfter(initialDate)) &&
+            (DateTime.parse(lista['data']).compareTo(lastDate) == 0 ||
+                DateTime.parse(lista['data']).isBefore(lastDate))) {
+          if (lista['idMovimentacao'] == 1) {
+            ganhos += lista['valor'];
           } else {
-            x = y;
-            x--;
-            break;
+            gastos += lista['valor'];
           }
-        }
-
-        if (y == li.length) {
+        } else {
           x = y;
+          x--;
+          break;
         }
-
-        Map<String, Object> mapa = new Map();
-        mapa['id'] = id;
-        mapa['dataInicial'] = initialDate;
-        mapa['dataFinal'] = lastDate;
-        mapa['ano'] = initialDate.year.toString();
-        mapa['periodo'] =
-            DateFormat("dd/MM/yyyy").format(initialDate).toString() +
-                " a " +
-                DateFormat("dd/MM/yyyy")
-                    .format(lastDate.subtract(Duration(days: 1)))
-                    .toString();
-        mapa['ganhos'] = ganhos;
-        mapa['gastos'] = gastos;
-        ganhos = 0;
-        gastos = 0;
-
-        makedList.add(mapa);
       }
+
+      if (y == li.length) {
+        x = y;
+      }
+
+      Map<String, Object> mapa = new Map();
+      mapa['dataInicial'] = initialDate;
+      mapa['dataFinal'] = lastDate;
+      mapa['ano'] = initialDate.year.toString();
+      mapa['periodo'] =
+          DateFormat("dd/MM/yyyy").format(initialDate).toString() +
+              " a " +
+              DateFormat("dd/MM/yyyy").format(lastDate).toString();
+      mapa['ganhos'] = ganhos;
+      mapa['gastos'] = gastos;
+      ganhos = 0;
+      gastos = 0;
+
+      makedList.add(mapa);
     }
     return makedList;
   }
 
   Future<List> getGanhosMes(int ano) async {
     var banco = await db;
-    var ganhoMensal = await banco.rawQuery(""
+    var ganhoMensal = await banco!.rawQuery(""
         "select "
         " case strftime('%m', data) "
         " when '01' then 'Janeiro' "
@@ -324,7 +320,7 @@ class BD extends GetxService {
 
   Future<List> getGanhosMensalDetalhado() async {
     var banco = await db;
-    return await banco.rawQuery(""
+    return await banco!.rawQuery(""
         " select "
         " case when e.descricao is not null then e.descricao"
         " else tp.descricao"
@@ -342,7 +338,7 @@ class BD extends GetxService {
 
   Future<String> getTotalGanhoMensal() async {
     var banco = await db;
-    var total = await banco.rawQuery(""
+    var total = await banco!.rawQuery(""
         " select "
         " sum(m.valor) as total"
         " from movimentacao m"
@@ -350,23 +346,23 @@ class BD extends GetxService {
         " strftime('%m', data) == '08'"
         " and id_tipo_movimentacao = 1");
 
-    return total[0]['total'];
+    return total[0]['total'].toString();
   }
 
   Future<String> getGastosSemana() async {
     var banco = await db;
-    var gasto = await banco.rawQuery(""
+    var gasto = await banco!.rawQuery(""
         "SELECT SUM(valor) as valor "
         "FROM $tabelaMovimentacao "
         "WHERE id_tipo_movimentacao = 2 and "
         "strftime('%W', data) = strftime('%W', 'now' ) ");
 
-    return gasto[0]['valor'];
+    return gasto[0]['valor'].toString();
   }
 
   Future<List> getGastosMensalDetalhado() async {
     var banco = await db;
-    return await banco.rawQuery(""
+    return await banco!.rawQuery(""
         "select"
         "  e.descricao as empresa, "
         "  sum(m.valor) as valor "
@@ -380,6 +376,6 @@ class BD extends GetxService {
 
   Future fechar() async {
     var banco = await db;
-    banco.close();
+    banco!.close();
   }
 }

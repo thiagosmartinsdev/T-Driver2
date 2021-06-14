@@ -98,7 +98,7 @@ class CalculoAceitacaoPage extends GetView<CalculoAceitacaoController> {
                                     ],
                                     onFieldSubmitted: (term) {
                                       controller.fieldFocusChange(
-                                          Get.context,
+                                          Get.context!,
                                           controller.recebidasNode,
                                           controller.aceitasNode);
                                     },

@@ -14,9 +14,9 @@ class MyApiClient {
       var releases = await db.getUltimosLancamentos(currentYear.value);
       var monthly = await db.getGanhosMes(currentYear.value);
       var weekly = await db.getGanhosSemana(currentYear.value);
-      List<MovimentacaoModel> listReleases;
-      List<CardModel> listMonthly;
-      List<CardModel> listWeekly;
+      List<MovimentacaoModel> listReleases = [];
+      List<CardModel> listMonthly = [];
+      List<CardModel> listWeekly = [];
 
       if (releases.length != 0) {
         listReleases = releases.map<MovimentacaoModel>((map) {
@@ -63,7 +63,7 @@ class MyApiClient {
           dataInicial: obj.dataInicial,
           dataFinal: obj.dataFinal);
 
-      List<MovimentacaoModel> releasesResume;
+      List<MovimentacaoModel> releasesResume = [];
 
       if (resume.length != 0) {
         releasesResume = resume.map<MovimentacaoModel>((map) {

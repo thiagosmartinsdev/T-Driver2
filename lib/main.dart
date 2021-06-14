@@ -18,7 +18,6 @@ Future<void> main() async {
       systemNavigationBarIconBrightness: Brightness.light));
   WidgetsFlutterBinding.ensureInitialized();
 
-  await GetStorage.init();
   await initServices();
 
   runApp(GetMaterialApp(
@@ -38,6 +37,7 @@ Future<void> main() async {
   ));
 }
 
-initServices() async {
-  await Get.putAsync(() => HomeService().init());
+Future<void> initServices() async {
+  await GetStorage.init();
+  await Get.putAsync(() async => HomeService().init());
 }

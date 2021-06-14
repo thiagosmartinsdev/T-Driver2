@@ -11,110 +11,114 @@ class HomePage extends GetView<HomeController> {
   final GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        resizeToAvoidBottomInset: false,
-        resizeToAvoidBottomPadding: true,
-        backgroundColor: Color(0xFFFAFAFA),
-        extendBody: true,
-        key: _drawerKey,
-        drawer: Drawer(
-            child: Container(
-                color: Colors.black38,
-                child: Stack(
-                  children: [
-                    BackGrroundApp(),
-                    ListView(
-                      padding: EdgeInsets.zero,
-                      children: [
-                        Container(
-                          height: Get.height * 0.2,
-                          child: DrawerHeader(
-                            child: Center(
-                                child: Text(
-                              "TDriver",
-                              style: TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: Get.width * 0.1),
-                            )),
-                            decoration: BoxDecoration(color: Colors.white38),
-                          ),
-                        ),
-                        ListTile(
-                            leading: Text(
-                              '%',
-                              style: TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            title: Text(
-                              "Taxa de  Aceitação",
-                              style: TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            onTap: () async {
-                              final accpetance =
-                                  await Get.toNamed('/acceptance');
-                              if (accpetance) Get.back();
-                            }),
-                      ],
-                    ),
-                  ],
-                ))),
-        body: SafeArea(
-          top: false,
-          bottom: false,
-          child: Obx(
-            () => Stack(children: [
-              BackGrroundApp(),
-              controller.lastReleases.isEmpty
-                  ? ListaVazia()
-                  : Container(
-                      height: double.infinity,
-                      padding: EdgeInsets.only(top: Get.height * 0.09),
-                      child: Column(
-                        children: <Widget>[
+    return LayoutBuilder(builder: (builder, constraints) {
+      return Scaffold(
+          resizeToAvoidBottomInset: false,
+          // resizeToAvoidBottomPadding: true,
+          backgroundColor: Color(0xFFFAFAFA),
+          extendBody: true,
+          key: _drawerKey,
+          drawer: Drawer(
+              child: Container(
+                  color: Colors.black12,
+                  child: Stack(
+                    children: [
+                      BackGrroundApp(),
+                      ListView(
+                        padding: EdgeInsets.zero,
+                        children: [
                           Container(
-                            height: Get.height * 0.4,
-                            child: _cards(),
+                            height: Get.height * 0.2,
+                            child: DrawerHeader(
+                              child: Center(
+                                  child: Text(
+                                "TDriver",
+                                style: TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: Get.width * 0.1),
+                              )),
+                              decoration: BoxDecoration(color: Colors.white38),
+                            ),
                           ),
-                          Container(
-                            child: _textLasReleases(),
-                          ),
-                          Expanded(
-                            child: Container(
-                              width: Get.width,
-                              child: Stack(
-                                children: [
-                                  _listLastReleases(),
-                                ],
+                          ListTile(
+                              leading: Text(
+                                '%',
+                                style: TextStyle(
+                                    color: Color(0xFFFAFAFA),
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold),
                               ),
-                            ),
-                          ),
+                              title: Text(
+                                "Taxa de  Aceitação",
+                                style: TextStyle(
+                                    color: Color(0xFFFAFAFA),
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              onTap: () async {
+                                final accpetance =
+                                    await Get.toNamed('/acceptance');
+                                if (accpetance) Get.back();
+                              }),
                         ],
                       ),
-                    ),
-              Container(
-                  padding: EdgeInsets.only(top: Get.height * 0.03),
-                  height: Get.height * 0.09,
-                  child: _menuAndYear()),
-              _buttomAdd(),
-            ]),
-          ),
-        ));
+                    ],
+                  ))),
+          body: SafeArea(
+            top: false,
+            bottom: false,
+            child: Obx(() => Stack(children: [
+                  BackGrroundApp(),
+                  controller.lastReleases.isEmpty
+                      ? ListaVazia()
+                      : Container(
+                          height: double.infinity,
+                          width: constraints.maxWidth,
+                          padding: EdgeInsets.only(top: Get.height * 0.11),
+                          child: Column(
+                            children: <Widget>[
+                              Container(
+                                height: Get.height * 0.4,
+                                child: _cards(),
+                              ),
+                              Container(
+                                child: _textLasReleases(),
+                              ),
+                              Expanded(
+                                child: Container(
+                                  width: Get.width,
+                                  child: Stack(
+                                    children: [
+                                      _listLastReleases(),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 8.0),
+                    child: Container(
+                        padding: EdgeInsets.only(top: Get.height * 0.03),
+                        height: Get.height * 0.09,
+                        child: _menuAndYear()),
+                  ),
+                  _buttomAdd(),
+                ])),
+          ));
+    });
   }
 
   _menuAndYear() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
-          padding:
-              EdgeInsets.only(top: Get.height * 0.01, left: Get.width * 0.06),
+          padding: EdgeInsets.only(left: Get.width * 0.06),
           child: IconButton(
-            onPressed: () => _drawerKey.currentState.openDrawer(),
+            onPressed: () => _drawerKey.currentState!.openDrawer(),
             icon: Icon(
               Icons.menu,
               size: 30,
@@ -123,8 +127,7 @@ class HomePage extends GetView<HomeController> {
           ),
         ),
         Padding(
-            padding: EdgeInsets.only(
-                top: Get.height * 0.01, right: Get.width * 0.06),
+            padding: EdgeInsets.only(right: Get.width * 0.06),
             child: MaterialButton(
               highlightElevation: 10,
               shape: RoundedRectangleBorder(
@@ -135,10 +138,10 @@ class HomePage extends GetView<HomeController> {
               onPressed: () async {
                 final dateSelected = await showYearPicker(
                   title: Text("Selecione o ano"),
-                  context: Get.context,
+                  context: Get.context!,
                   initialDate: DateTime.now(),
                   firstDate: DateTime.utc(2014, 1, 1),
-                  lastDate: DateTime.now(),
+                  lastDate: DateTime.now(), titlePadding: EdgeInsetsGeometry.infinity,
                 );
 
                 if (dateSelected != null) {
@@ -158,7 +161,7 @@ class HomePage extends GetView<HomeController> {
   }
 
   _cards() {
-    return SizedBox(height: Get.height * 0.40, child: SwipperCards());
+    return Container(height: Get.height * 0.40, child: SwipperCards());
   }
 
   _textLasReleases() {
@@ -166,6 +169,7 @@ class HomePage extends GetView<HomeController> {
       width: Get.width,
       height: Get.height * 0.067,
       alignment: Alignment.center,
+      padding: EdgeInsets.only(bottom: Get.height * 0.01),
       child: Text("Últimos lançamentos",
           style: TextStyle(
               color: Color(0xFF636363),
@@ -178,7 +182,7 @@ class HomePage extends GetView<HomeController> {
     return Center(
       child: Container(
         width: Get.width * 0.95,
-        child: ListaUltimosLancamentos(),
+        child: ListaUltimosLancamentos()
       ),
     );
   }

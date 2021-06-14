@@ -7,7 +7,7 @@ import 'package:tdriver2/app/modules/home/home_controller.dart';
 import 'package:tdriver2/app/modules/widgets/item_ultimos_lancamentos.dart';
 
 class ListaUltimosLancamentos extends StatelessWidget {
-  ListaUltimosLancamentos({Key key}) : super(key: key);
+  ListaUltimosLancamentos({Key? key}) : super(key: key);
 
   final HomeController _ = Get.find();
 

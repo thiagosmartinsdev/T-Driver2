@@ -14,12 +14,12 @@ enum FlutterDatePickerMode {
 }
 
 Future<DateTime> showYearPicker({
-  @required BuildContext context,
-  @required DateTime initialDate,
-  DateTime firstDate,
-  DateTime lastDate,
-  Widget title,
-  EdgeInsetsGeometry titlePadding,
+  required BuildContext context,
+  required DateTime initialDate,
+  required DateTime firstDate,
+  required DateTime lastDate,
+  required Widget title,
+  required EdgeInsetsGeometry titlePadding,
 }) async {
   assert(context != null);
   assert(initialDate != null);
@@ -29,8 +29,8 @@ Future<DateTime> showYearPicker({
     builder: (context) => FlutterDatePicker(
       mode: FlutterDatePickerMode.year,
       selectedDate: initialDate,
-      firstDate: firstDate ?? DateTime(0),
-      lastDate: lastDate ?? DateTime(9999),
+      firstDate: firstDate,
+      lastDate: lastDate,
       title: title,
       titlePadding: titlePadding,
     ),
@@ -51,13 +51,13 @@ class FlutterDatePicker extends StatefulWidget {
   final DateTime lastDate;
 
   FlutterDatePicker(
-      {Key key,
-      @required this.mode,
-      this.title,
-      this.titlePadding,
-      @required this.selectedDate,
-      @required this.firstDate,
-      @required this.lastDate})
+      {Key? key,
+      required this.mode,
+      required this.title,
+      required this.titlePadding,
+      required this.selectedDate,
+      required this.firstDate,
+      required this.lastDate})
       : assert(!firstDate.isAfter(lastDate)),
         assert(
             selectedDate.isAfter(firstDate) && selectedDate.isBefore(lastDate)),
@@ -69,7 +69,7 @@ class FlutterDatePicker extends StatefulWidget {
 
 class _FlutterDatePickerState extends State<FlutterDatePicker> {
   final GlobalKey _pickerKey = GlobalKey();
-  DateTime _selectedDate;
+  late DateTime _selectedDate;
 
   @override
   void initState() {
@@ -80,9 +80,9 @@ class _FlutterDatePickerState extends State<FlutterDatePicker> {
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
-        titlePadding: widget.titlePadding ?? widget.title == null
-            ? EdgeInsets.all(0)
-            : EdgeInsets.all(20.0),
+        // titlePadding: widget.titlePadding ?? widget.title == null
+        //     ? EdgeInsets.all(0)
+        //     : EdgeInsets.all(20.0),
         title: widget.title,
         titleTextStyle:
             GoogleFonts.mcLaren(color: Color(0xFF546E7A), fontSize: 20),
@@ -90,6 +90,7 @@ class _FlutterDatePickerState extends State<FlutterDatePicker> {
           Container(
               height: 300,
               width: double.maxFinite,
+              // ignore: deprecated_member_use
               child: YearPicker(
                 key: _pickerKey,
                 firstDate: widget.firstDate,

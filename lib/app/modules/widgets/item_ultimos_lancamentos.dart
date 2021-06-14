@@ -6,8 +6,7 @@ import 'package:tdriver2/app/data/model/movimentacao.dart';
 
 class ItemUltimosLancamentos extends StatelessWidget {
   final MovimentacaoModel model;
-  final bool green;
-  const ItemUltimosLancamentos({Key key, this.model, this.green})
+  const ItemUltimosLancamentos({Key? key, required this.model})
       : super(key: key);
 
   @override
@@ -26,7 +25,7 @@ class ItemUltimosLancamentos extends StatelessWidget {
                   offset: Offset(1, 4),
                   color: Colors.black45)
             ]),
-        height: Get.height * 0.07,
+        height: Get.height * 0.08,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [

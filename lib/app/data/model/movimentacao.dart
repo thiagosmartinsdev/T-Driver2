@@ -1,14 +1,14 @@
 import 'package:intl/intl.dart';
 
 class MovimentacaoModel {
-  int idMovimentacao;
-  int idTipoMovimentacao;
-  int idEmpresa;
-  int idTipoGasto;
-  double valor;
-  DateTime data;
+  late int? idMovimentacao;
+  late int idTipoMovimentacao;
+  late int? idEmpresa;
+  late int? idTipoGasto;
+  late double valor;
+  late DateTime data;
 
-  String motivo;
+  late String motivo;
 
   MovimentacaoModel(this.idMovimentacao, this.idTipoMovimentacao,
       this.idEmpresa, this.idTipoGasto, this.valor, this.data);

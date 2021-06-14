@@ -8,11 +8,11 @@ import 'package:tdriver2/app/data/repository/releases_repository.dart';
 
 class DetailsController extends GetxController {
   final ReleasesRepository repository;
-  DetailsController({@required this.repository}) : assert(repository != null);
+  DetailsController({required this.repository}) : assert(repository != null);
 
   var obj = Get.arguments;
   final date = DateTime.now().obs;
-  final listReleases = List<MovimentacaoModel>().obs;
+  final listReleases = [].obs;
 
   @override
   onReady() {

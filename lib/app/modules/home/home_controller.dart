@@ -9,27 +9,25 @@ import 'package:tdriver2/app/data/repository/releases_repository.dart';
 
 class HomeController extends GetxController {
   final ReleasesRepository repository;
-  HomeController({@required this.repository}) : assert(repository != null);
+  HomeController({required this.repository}) : assert(repository != null);
 
-  static HomeController get to => Get.find();
+  static HomeController get i => Get.find();
 
-  final lastReleases = List<MovimentacaoModel>().obs;
-  var releasesMontlhy = List<CardModel>();
-  // var releasesMontlhy = List().obs;
-  var releasesWeekly = List<CardModel>().obs;
+  final lastReleases = [].obs;
+  final releasesMontlhy = [].obs;
+  final releasesWeekly = [].obs;
 
   var currentYear = DateTime.now().year.obs;
   var newUser = true.obs;
 
   @override
-  void onInit() {
+  Future<void> onInit() async {
     final checkUser = GetStorage();
 
     checkUser.read('newUser') ?? checkUser.write('newUser', true);
 
-    newUser.value = checkUser.read('newUser');
+    newUser.value = false; // checkUser.read('newUser');
     ever(currentYear, (value) => resetHome());
-    loadReleases();
     super.onInit();
   }
 
@@ -42,21 +40,24 @@ class HomeController extends GetxController {
   }
 
   Future<void> loadReleases() async {
-    await repository.getAll(currentYear).then((response) {
-      if (response['releases'] != null) {
-        response['releases'].forEach((element) {
+    var result = await repository.getAll(currentYear);
+    if (result != null) {
+      if (result['releases'] != null) {
+        result['releases'].forEach((element) {
           lastReleases.add(element);
         });
 
-        response['monthly'].forEach((element) {
+        result['monthly'].forEach((element) {
           releasesMontlhy.add(element);
         });
+        // releasesMontlhy.clear();
 
-        response['weekly'].forEach((element) {
+        result['weekly'].forEach((element) {
           releasesWeekly.add(element);
         });
+        // releasesWeekly.clear();
       }
-    });
+    }
 
     update();
   }
